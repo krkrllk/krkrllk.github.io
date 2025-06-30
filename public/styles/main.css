@@ -1,0 +1,829 @@
+:root {
+            --bg-color: #f5f7fa;
+            --text-color: #2d3748;
+            --header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --section-bg: white;
+            --section-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            --border-color: #e2e8f0;
+            --button-bg: #667eea;
+            --button-text: white;
+            --button-hover-bg: #5a67d8;
+            --word-card-bg: white;
+            --word-card-border: #e2e8f0;
+            --category-color: #718096;
+            --delete-btn-bg: #fc8181;
+            --delete-btn-hover-bg: #f56565;
+            --quiz-bg: #f7fafc;
+        }
+        [data-theme="dark"] {
+            --bg-color: #1a202c;
+            --text-color: #cbd5e0;
+            --header-bg: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            --section-bg: #2d3748;
+            --section-shadow: 0 2px 4px rgba(255,255,255,0.05);
+            --border-color: #4a5568;
+            --button-bg: #4a5568;
+            --button-text: #cbd5e0;
+            --button-hover-bg: #718096;
+            --word-card-bg: #4a5568;
+            --word-card-border: #718096;
+            --category-color: #a0aec0;
+            --delete-btn-bg: #e53e3e;
+            --delete-btn-hover-bg: #c53030;
+            --quiz-bg: #4a5568;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+
+header {
+    background: var(--header-bg);
+    color: var(--button-text);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Navigation bar for .back-link and #theme-toggle */
+.header-nav {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none; /* allow children to be clickable, but not the bar itself */
+    z-index: 10;
+    height: 48px;
+}
+
+.header-nav .back-link,
+.header-nav #theme-toggle {
+    pointer-events: auto;
+    position: static;
+    margin: 0 16px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--button-text);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6px);
+    transition: background 0.3s, transform 0.2s;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.2;
+    display: inline-block;
+    min-width: unset;
+    width: auto;
+}
+
+.header-nav .back-link:hover,
+.header-nav #theme-toggle:hover,
+.header-nav .back-link:focus,
+.header-nav #theme-toggle:focus {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    color: var(--button-text);
+    outline: none;
+}
+
+/* Back button styling */
+.back-link {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--button-text);
+    padding: 8px 12px; /* Reduced horizontal padding */
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6px);
+    transition: background 0.3s ease, transform 0.2s ease;
+    min-width: unset; /* Remove any min-width if set elsewhere */
+    width: auto;
+}
+
+
+.back-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+.section {
+    background: var(--section-bg);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--section-shadow);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+h2 { color: var(--text-color); margin-bottom: 1.5rem; }
+input, select, button {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 100%;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--section-bg);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover { background-color: var(--button-hover-bg); }
+.word-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.category { color: var(--category-color); font-size: 0.875rem; margin-top: 0.5rem; }
+.delete-btn {
+    background-color: var(--delete-btn-bg);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+.delete-btn:hover { background-color: var(--delete-btn-hover-bg); }
+.fade-in { animation: fadeIn 0.5s ease-in; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.97);}
+    to { opacity: 1; transform: scale(1);}
+}
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.stats {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--section-bg);
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+.error { color: #e53e3e; margin-top: 0.5rem; }
+.success { color: #38a169; margin-top: 0.5rem; }
+.custom-category {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.custom-category input {
+    width: 50%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    color: var(--text-color);
+    background-color: var(--section-bg);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.custom-category button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.custom-category button:hover { background-color: var(--button-hover-bg); }
+.category-folders {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.category-folder {
+    position: relative;
+    background: var(--section-bg);
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-color);
+    min-width: 120px;
+}
+.category-folder:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.category-folder .delete-category-btn {
+    background: var(--delete-btn-bg);
+    color: var(--button-text);
+    border: 3px solid var(--delete-btn-bg);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: background-color 0.3s, transform 0.2s, border-color 0.3s;
+}
+.category-folder .delete-category-btn:hover {
+    background: var(--delete-btn-hover-bg);
+    border-color: var(--delete-btn-hover-bg);
+    transform: scale(1.1);
+}
+.memory-grid {
+    display: grid;
+    gap: 0.5rem; /* Less space between cards */
+    margin-top: 1rem;
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+}
+.memory-card {
+    min-width: 70px;
+    min-height: 70px;
+    max-width: 120px;
+    max-height: 120px;
+    width: 100%;
+    height: 100%;
+    perspective: 800px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+.memory-card.flipped .card-inner,
+.memory-card.matched .card-inner {
+    transform: rotateY(180deg);
+}
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    background: var(--section-bg);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+}
+.card-front {
+    background: var(--button-bg);
+    color: var(--button-text);
+}
+.card-back {
+    background: var(--section-bg);
+    color: var(--text-color);
+    transform: rotateY(180deg);
+}
+.memory-card.matched .card-back {
+    background: #4ade80;
+    color: #fff;
+    border: 2px solid #38a169;
+}
+.quiz-question {
+    margin-bottom: 2rem;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+    border: 2px solid #a4bad8;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(52, 112, 255, 0.09);
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: background 0.3s, border-color 0.3s;
+}
+.quiz-question p {
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+    color: #3b3b5c;
+    font-weight: bold;
+    text-align: center;
+}
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.quiz-option-row {
+    display: flex;
+    align-items: center;
+    background: #e8f0fe;
+    border-radius: 10px;
+    padding: 0.7rem 1.2rem;
+    transition: background 0.2s, border-color 0.2s;
+    cursor: pointer;
+    border: 2px solid transparent;
+    font-size: 1.05rem;
+}
+.quiz-option-row:hover,
+.quiz-option-row.selected {
+    background: #dbeafe;
+    border-color: #667eea;
+}
+.quiz-option-row.correct {
+    background: #d1fae5;
+    border-color: #38a169;
+}
+.quiz-option-row.incorrect {
+    background: #fee2e2;
+    border-color: #e53e3e;
+}
+.quiz-option-radio {
+    margin-right: 1rem;
+    accent-color: #667eea;
+    width: 1.2rem;
+    height: 1.2rem;
+    flex-shrink: 0;
+}
+.quiz-option-label {
+    flex: 1;
+    font-size: 1.05rem;
+    color: #222;
+}
+.quiz-question p { font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-color); }
+.quiz-question label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    gap: 0.5rem;
+}
+.quiz-question input[type="radio"] {
+    margin-right: 0.5rem;
+    margin-top: 0;
+    vertical-align: middle;
+    accent-color: var(--button-bg);
+}
+#quizResults {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--section-bg);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+#theme-toggle {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--button-text);
+    padding: 8px 12px; /* Reduced horizontal padding */
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6px);
+    transition: background 0.3s ease, transform 0.2s ease;
+    min-width: unset; /* Remove any min-width if set elsewhere */
+    width: auto;
+}
+
+#theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+#wordSearchGrid {
+    display: grid;
+    gap: 2px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.word-search-cell {
+    background: var(--section-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s, color 0.2s;
+}
+.word-search-cell.selected {
+    background: var(--button-bg);
+    color: var(--button-text);
+}
+.word-search-cell.found {
+    background: #38a169;
+    color: #fff;
+}
+.ws-word { cursor: pointer; margin-right: 0.5em; }
+.ws-found { text-decoration: line-through; color: #38a169; }
+.flashcard { width: 250px; height: 150px; margin: 1rem auto; perspective: 1000px; cursor: pointer; }
+.flashcard-inner {
+    width: 100%; height: 100%; position: relative; transition: transform 0.6s; transform-style: preserve-3d;
+}
+.flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back {
+    position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 1.2rem; padding: 1rem;
+}
+.flashcard-front { background: var(--button-bg); color: var(--button-text); }
+.flashcard-back { background: #93c5fd; color: #222; transform: rotateY(180deg);}
+.flashcard-controls { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem; }
+.tab-btn.active { font-weight: bold; border-bottom: 2px solid var(--button-bg); }
+.game-container { display: none; }
+.game-container.active { display: block; }
+.learning-center {
+    margin-top: 2rem;
+    background: var(--section-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--section-shadow);
+}
+.learning-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    background: #667eea;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+}
+.tab-btn:hover {
+    background: #5a67d8;
+    color: var(--button-text);
+    border-color: var(--button-bg);
+    transform: translateY(-2px);
+}
+.tab-btn.active {
+    background: var(--button-bg);
+    color: var(--button-text);
+    border-color: var(--button-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.game-container {
+    background: var(--section-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: var(--section-shadow);
+
+}
+
+.game-container.compact {
+    padding: 1rem;
+}
+.game-container.active {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+#irregularVerbGameContainer {
+    background: var(--section-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: var(--section-shadow);
+
+}
+#irregularVerbGameContainer:hover {
+    transform: translateY(-2px);
+}
+.irregular-verbs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.irregular-verbs-table th,
+.irregular-verbs-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+.irregular-verbs-table th {
+    background-color: var(--section-bg);
+    font-weight: 600;
+}
+.irregular-verbs-table tr:hover {
+    background-color: var(--bg-color);
+    background-color: #4a5568;
+}
+#hangmanGame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+#hangmanCanvas {
+    width: 200px;
+    height: 200px;
+    border: 2px solid var(--border-color);
+    margin: 1rem 0;
+}
+#hangmanLetters {
+    display: grid;
+    grid-template-columns: repeat(13, 2.2rem);
+    grid-template-rows: repeat(2, 2.2rem);
+    gap: 0.4rem;
+    justify-content: center;
+    background: #f3f6fa;
+    border-radius: 10px;
+    padding: 0.7rem 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 8px rgba(100,120,180,0.06);
+    max-width: 32rem;
+}
+.letter-btn {
+    padding: 0.3rem;
+    font-size: 1rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    text-align: center;
+    border: 2px solid #bfc9d1;
+    border-radius: 8px;
+    margin: 2px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    color: #fff;
+    font-weight: bold;
+}
+.letter-btn[data-color="0"] { background: #7dafff; }
+.letter-btn[data-color="1"] { background: #f48fb1; }
+.letter-btn[data-color="2"] { background: #81d4fa; }
+.letter-btn[data-color="3"] { background: #aed581; }
+.letter-btn[data-color="4"] { background: #ffd966; }
+.letter-btn[data-color="5"] { background: #ffb347; }
+.letter-btn[data-color="6"] { background: #b39ddb; }
+.letter-btn[data-color="7"] { background: #ff8a65; }
+.letter-btn[data-color="8"] { background: #4dd0e1; }
+.letter-btn[data-color="9"] { background: #f06292; }
+.letter-btn:hover, .letter-btn:focus {
+    border-color: #333;
+    filter: brightness(1.1);
+    outline: none;
+}
+#hangmanWord {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    color: var(--text-color);
+}
+#dictionaryGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 50px;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    transition: max-height 0.3s, opacity 0.3s;
+    overflow: hidden;
+}
+#dictionaryGrid > div {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.delete-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+#memoryGrid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1rem;
+    flex-wrap: nowrap;
+}
+/* Add this to your existing main.css */
+
+.container {
+    max-width: 960px; /* Limit content width */
+    margin: 20px auto; /* Center the container */
+    padding: 0 20px; /* Add some padding on the sides */
+}
+
+header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee; /* Add a subtle separator */
+    overflow: auto; /* Clear floats */
+}
+
+header h1 {
+    margin: 0;
+    display: inline-block;
+}
+
+header a {
+    text-decoration: none;
+    color: #007bff; /* Example link color */
+}
+
+section {
+    margin-bottom: 30px; /* Space between sections */
+}
+
+.card {
+    background-color: var(--section-bg) !important;
+    border-radius: 16px;
+    box-shadow: var(--section-shadow);
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    border: 1.5px solid var(--border-color);
+    transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: var(--category-color);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.card p {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 1.08rem;
+}
+
+.learning-center {
+    background: linear-gradient(120deg, var(--primary-gradient), var(--secondary-gradient));
+    border-radius: 18px;
+    padding: 2.5rem 2rem;
+    box-shadow: var(--section-shadow);
+    margin-top: 2rem;
+}
+
+.learning-center .card {
+    background: #fff !important;
+    color: #232946 !important;
+    border: 1.5px solid var(--border-color);
+}
+
+.learning-center .card button,
+.card button {
+    background: var(--button-bg);
+    color: var(--button-text);
+    border-radius: 8px;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1.08rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    margin-top: 1rem;
+    letter-spacing: 0.01em;
+}
+
+.learning-center .card button:hover,
+.card button:hover {
+    background: var(--button-hover-bg);
+    color: #fff;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(162,28,175,0.12);
+}
+
+/* Consistent style for .back-link and #theme-toggle */
+.back-link,
+#theme-toggle {
+    position: absolute;
+    top: 16px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--button-text);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6px);
+    transition: background 0.3s, transform 0.2s;
+    min-width: unset;
+    width: auto;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.2;
+    display: inline-block;
+}
+
+.back-link {
+    left: 16px;
+}
+
+#theme-toggle {
+    right: 16px;
+}
+
+.back-link:hover,
+#theme-toggle:hover,
+.back-link:focus,
+#theme-toggle:focus {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    color: var(--button-text);
+    outline: none;
+}
+.flip-card {
+    background-color: transparent;
+    width: 320px;
+    height: 220px;
+    perspective: 1000px;
+    margin: 1em auto;
+}
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(.4,2,.6,1);
+    transform-style: preserve-3d;
+}
+.flip-card-inner.flipped {
+    transform: rotateY(180deg);
+}
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #0001;
+    padding: 1em;
+    box-sizing: border-box;
+}
+.flip-card-front {
+    z-index: 2;
+}
+.flip-card-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+    text-align: center;
+}
+
+/* Dark mode styles for Irregular Verbs Flashcards flip card */
+[data-theme="dark"] .flip-card-front,
+[data-theme="dark"] .flip-card-back {
+    background: #272f3d !important; /* deep dark background */
+    color: #f4f4f9 !important;      /* light text */
+    border: 1px solid #4a5568 !important;
+    box-shadow: 0 2px 8px #0005;
+}
+
+[data-theme="dark"] .flip-card {
+    background-color: transparent;
+}
+
+
+
+[data-theme="dark"] .flip-card-back {
+    /* Ensures text is centered and readable */
+    text-align: center;
+}

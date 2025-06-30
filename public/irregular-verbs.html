@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Irregular Verbs</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+        <header>
+              <nav class="header-nav">    
+                <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+                <a href="index.html" class="back-link">Back to Dictionary</a></nav>
+            <h1>Irregular Verbs</h1>
+            <p>Master Irregular Verbs with Interactive Games</p>
+        </header>
+        
+    <div class="container">
+        <section class="card center">
+            <button id="showTableBtn">Show Irregular Verbs Table</button>
+            <button id="typingGameBtn">Typing Game</button>
+            <button id="flashcardsGameBtn">Flashcards</button>
+            <button id="quizGameBtn">Quiz</button>
+
+        </section>
+
+        <section class="card">
+            <div id="irregularVerbsTableContainer" style="display:none;"></div>
+            <div id="gameContainer" style="display:none;">
+                <div id="irregularVerbGame"></div>
+                <div id="irregularVerbFlashcardsGame"></div>
+                <div id="irregularVerbQuizGame"></div>
+                <div id="irregularVerbMemoryGame"></div>
+            </div>
+        </section>
+    </div>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/irregularverbs.js"></script>
+    <script>
+        // Dark mode toggle logic (same as index.html)
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            if (window.toggleDarkMode) {
+                window.toggleDarkMode();
+            }
+        });
+
+        // Button event listeners for games and table
+        document.getElementById('showTableBtn').addEventListener('click', function() {
+            if (window.toggleIrregularVerbsTable) window.toggleIrregularVerbsTable();
+        });
+        document.getElementById('typingGameBtn').addEventListener('click', function() {
+            if (window.showGame) window.showGame('typing');
+        });
+        document.getElementById('flashcardsGameBtn').addEventListener('click', function() {
+            if (window.showGame) window.showGame('flashcards');
+        });
+        document.getElementById('quizGameBtn').addEventListener('click', function() {
+            if (window.showGame) window.showGame('quiz');
+        });
+    </script>
+</body>
+</html>
