@@ -16,6 +16,8 @@ function switchTab(tabId) {
     });
 }
 
+
+
 // Toggle dictionary visibility
 function toggleDictionary() {
     const grid = document.getElementById('dictionaryGrid');
@@ -30,6 +32,36 @@ function toggleDictionary() {
         grid.style.display = 'none';
         if (stats) stats.style.display = 'none';
         btn.textContent = 'Show Dictionary';
+    }
+}
+
+// Toggle import/export section visibility
+function toggleImportExport() {
+    const section = document.getElementById('importExportSection');
+    const btn = document.getElementById('toggleImportExportBtn');
+    if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+        btn.textContent = 'Hide Import/Export';
+    } else {
+        section.style.display = 'none';
+        btn.textContent = 'Show Import/Export';
+    }
+}
+
+// Toggle manage categories visibility
+function toggleManageCategories() {
+    const content = document.getElementById('manageCategoriesContent');
+    const folders = document.getElementById('categoryFolders');
+    const btn = document.getElementById('toggleManageCategoriesBtn');
+    if (!content || !folders || !btn) return;
+    if (content.style.display === 'none') {
+        content.style.display = '';
+        folders.style.display = '';
+        btn.textContent = 'Hide Categories';
+    } else {
+        content.style.display = 'none';
+        folders.style.display = 'none';
+        btn.textContent = 'Show Categories';
     }
 }
 
@@ -105,9 +137,65 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextBtn = document.querySelector('.flashcard-controls button:last-child');
     if (nextBtn) {
         nextBtn.removeAttribute('onclick');
-        nextBtn.addEventListener('click', e => {
-            e.stopPropagation();
-            window.nextCard && window.nextCard();
-        });
-    }
+            nextBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                window.nextCard && window.nextCard();
+            });
+        }
+    });
+
+document.getElementById('addCategoryBtn').addEventListener('click', addCategory);
+document.getElementById('addCategoryInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') addCategory();
+});
+
+function addCategory() {
+  const input = document.getElementById('addCategoryInput');
+  const newCategory = input.value.trim();
+  if (!newCategory) return;
+  let categories = JSON.parse(localStorage.getItem('categories') || '[]');
+  if (!categories.includes(newCategory)) {
+    categories.push(newCategory);
+    localStorage.setItem('categories', JSON.stringify(categories));
+    displayCategoryFolders();
+    updateCategoryDropdown();
+  }
+  input.value = '';
+  input.focus();
+}
+
+// Navigation dropdown handler
+document.addEventListener("DOMContentLoaded", function() {
+  const navDropdown = document.getElementById('navDropdown');
+  if (navDropdown) {
+    navDropdown.addEventListener('change', function() {
+      const selectedValue = this.value;
+      if (selectedValue) {
+        const [tabId, isGame] = selectedValue.split('|');
+        switchTab(tabId);
+        if (isGame === 'true') {
+          // If it's a game, start the game directly
+          const startGameFunc = window[`start${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`];
+          if (typeof startGameFunc === 'function') {
+            startGameFunc();
+          }
+        }
+      }
+    });
+  }
+});
+
+// Dropdown toggle logic (only one instance!)
+document.addEventListener('DOMContentLoaded', function() {
+  const dropbtn = document.querySelector('.dropbtn');
+  const dropdownContent = document.querySelector('.dropdown-content');
+  if (dropbtn && dropdownContent) {
+    dropbtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', function() {
+      dropdownContent.style.display = 'none';
+    });
+  }
 });

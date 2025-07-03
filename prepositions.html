@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preposition Game</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<header>
+  <nav class="header-nav">
+    <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+    <a href="index.html" class="back-link">Back to Main</a>
+  </nav>
+  <h1>Preposition Game</h1>
+  <p>Practice your prepositions!</p>
+</header>
+<div class="container">
+  <h2>Preposition Games</h2>
+  <div class="game-tabs">
+    <button id="tab-sentences" class="active">Sentence Game</button>
+    <button id="tab-places">Places Game</button>
+  </div>
+  <div id="sentence-game" style="margin-top:1em;">
+    <div style="margin-bottom:1em;">
+      <label for="prep-question-count"><b>How many questions?</b></label>
+      <input type="number" id="prep-question-count" min="1" max="25" value="10" style="width:60px;">
+      <button id="prep-start">Start Game</button>
+    </div>
+    <div id="preposition-game" style="display:none;">
+      <p id="prep-question"></p>
+      <select id="prep-options"></select>
+      <button id="prep-submit">Submit</button>
+      <div id="prep-feedback" style="margin-top:10px;"></div>
+      <div id="prep-score" style="margin-top:10px;"></div>
+    </div>
+  </div>
+  <div id="places-game" style="display:none; margin-top:1em;">
+    <div id="places-prompt" style="font-size:1.2em; margin-bottom:1em;"></div>
+    <div id="places-drag-area" style="position:relative; width:320px; height:180px; border:1px solid #ccc; margin-bottom:1em; background:#f9f9f9;">
+      <!-- Ball (draggable) -->
+      <div id="places-ball" draggable="true" style="width:40px; height:40px; border-radius:50%; background:#ff9800; position:absolute; left:10px; top:60px; cursor:grab; box-shadow:0 2px 6px #aaa;"></div>
+      <!-- Table (rectangle) -->
+      <div id="places-table" style="width:120px; height:20px; background:#8d5524; position:absolute; left:180px; top:100px; border-radius:6px; display:none;"></div>
+      <!-- Box (rectangle) -->
+      <div id="places-box" style="width:80px; height:50px; background:#bdbdbd; position:absolute; left:200px; top:100px; border-radius:8px; display:none;"></div>
+      <!-- Drop zones -->
+      <div id="drop-on" style="position:absolute; left:200px; top:80px; width:80px; height:20px; border:2px dashed #4caf50; border-radius:8px; pointer-events:auto; display:none;"></div>
+      <div id="drop-under" style="position:absolute; left:200px; top:120px; width:80px; height:20px; border:2px dashed #2196f3; border-radius:8px; pointer-events:auto; display:none;"></div>
+      <div id="drop-in" style="position:absolute; left:210px; top:110px; width:60px; height:30px; border:2px dashed #ff9800; border-radius:8px; pointer-events:auto; display:none;"></div>
+    </div>
+    <div id="places-feedback" style="margin-top:10px;"></div>
+    <button id="places-next" style="display:none; margin-top:10px;">Next</button>
+    <div id="places-score" style="margin-top:10px;"></div>
+  </div>
+</div>
+<script src="scripts/theme.js"></script>
+<script>
+// --- Sentence Game (Expanded & Randomized) ---
+const prepositionQuestions = [
+  { sentence: "She is interested ___ learning languages.", answer: "in", options: ["at", "in", "on", "to"] },
+  { sentence: "The cat is hiding ___ the table.", answer: "under", options: ["on", "in", "under", "over"] },
+  { sentence: "He arrived ___ the airport early.", answer: "at", options: ["in", "on", "at", "to"] },
+  { sentence: "We will meet ___ Monday.", answer: "on", options: ["at", "in", "on", "by"] },
+  { sentence: "She walked ___ the park.", answer: "through", options: ["across", "through", "over", "under"] },
+  { sentence: "The book is ___ the shelf.", answer: "on", options: ["in", "on", "at", "by"] },
+  { sentence: "He lives ___ London.", answer: "in", options: ["at", "in", "on", "by"] },
+  { sentence: "The dog jumped ___ the fence.", answer: "over", options: ["over", "on", "in", "at"] },
+  { sentence: "She put the keys ___ her bag.", answer: "in", options: ["on", "in", "at", "by"] },
+  { sentence: "We are going ___ vacation next week.", answer: "on", options: ["in", "on", "at", "to"] },
+  // More questions:
+  { sentence: "The picture is ___ the wall.", answer: "on", options: ["in", "on", "at", "by"] },
+  { sentence: "He sat ___ the chair.", answer: "on", options: ["in", "on", "at", "by"] },
+  { sentence: "The kids are playing ___ the garden.", answer: "in", options: ["in", "on", "at", "by"] },
+  { sentence: "She arrived ___ time.", answer: "on", options: ["in", "on", "at", "by"] },
+  { sentence: "The train goes ___ the tunnel.", answer: "through", options: ["over", "through", "under", "in"] },
+  { sentence: "He stood ___ the door.", answer: "at", options: ["in", "on", "at", "by"] },
+  { sentence: "The bird flew ___ the house.", answer: "over", options: ["over", "on", "in", "at"] },
+  { sentence: "The ball rolled ___ the table.", answer: "under", options: ["on", "in", "under", "by"] },
+  { sentence: "She is good ___ math.", answer: "at", options: ["in", "on", "at", "by"] },
+  { sentence: "We talked ___ the phone.", answer: "on", options: ["in", "on", "at", "by"] },
+  { sentence: "He is afraid ___ spiders.", answer: "of", options: ["of", "in", "on", "at"] },
+  { sentence: "The shop is ___ the corner.", answer: "on", options: ["in", "on", "at", "by"] },
+  { sentence: "She was born ___ 2005.", answer: "in", options: ["in", "on", "at", "by"] },
+  { sentence: "The car is parked ___ front of the house.", answer: "in", options: ["in", "on", "at", "by"] },
+  { sentence: "He waited ___ the bus stop.", answer: "at", options: ["in", "on", "at", "by"] }
+];
+
+let selectedQuestions = [];
+let currentQuestion = 0;
+let score = 0;
+let mistakes = [];
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function startPrepositionGame() {
+  mistakes = [];
+  const countInput = document.getElementById('prep-question-count');
+  let count = parseInt(countInput.value, 10);
+  if (isNaN(count) || count < 1) count = 1;
+  if (count > prepositionQuestions.length) count = prepositionQuestions.length;
+  // Shuffle and pick random questions
+  selectedQuestions = prepositionQuestions.slice();
+  shuffleArray(selectedQuestions);
+  selectedQuestions = selectedQuestions.slice(0, count);
+  currentQuestion = 0;
+  score = 0;
+  document.getElementById('preposition-game').style.display = '';
+  document.getElementById('prep-feedback').textContent = '';
+  document.getElementById('prep-score').textContent = '';
+  showPrepositionQuestion();
+}
+
+function showPrepositionQuestion() {
+  const q = selectedQuestions[currentQuestion];
+  document.getElementById('prep-question').textContent = q.sentence;
+  const select = document.getElementById('prep-options');
+  select.innerHTML = '';
+  q.options.forEach(opt => {
+    const option = document.createElement('option');
+    option.value = opt;
+    option.textContent = opt;
+    select.appendChild(option);
+  });
+  document.getElementById('prep-feedback').textContent = '';
+}
+
+function handlePrepositionSubmit() {
+  const q = selectedQuestions[currentQuestion];
+  const selected = document.getElementById('prep-options').value;
+  const feedback = document.getElementById('prep-feedback');
+  if (selected === q.answer) {
+    feedback.textContent = "✅ Correct!";
+    feedback.style.color = "green";
+    score++;
+  } else {
+    feedback.textContent = `❌ Incorrect. The correct answer is "${q.answer}".`;
+    feedback.style.color = "red";
+    // Record the mistake
+    mistakes.push({
+      sentence: q.sentence,
+      yourAnswer: selected,
+      correctAnswer: q.answer
+    });
+  }
+  document.getElementById('prep-score').textContent = `Score: ${score} / ${selectedQuestions.length}`;
+  setTimeout(() => {
+    currentQuestion++;
+    if (currentQuestion < selectedQuestions.length) {
+      showPrepositionQuestion();
+    } else {
+      showSentenceGameResults();
+    }
+  }, 1200);
+}
+
+function showSentenceGameResults() {
+  let html = `<h3>Game Over!</h3><p>Your final score: ${score} / ${selectedQuestions.length}</p>`;
+  if (mistakes.length > 0) {
+    html += `<h4>Your Mistakes:</h4><ul style="color:#b71c1c;">`;
+    mistakes.forEach(m => {
+      html += `<li>
+        <b>${m.sentence.replace('___', `<span style="color:#1976d2">${m.yourAnswer}</span>`)}</b>
+        <br>Correct answer: <span style="color:green">${m.correctAnswer}</span>
+      </li>`;
+    });
+    html += `</ul>`;
+  } else {
+    html += `<p style="color:green;"><b>No mistakes! Well done!</b></p>`;
+  }
+  html += `<button onclick="restartPrepositionGame()">Play Again</button>`;
+  document.getElementById('preposition-game').innerHTML = html;
+}
+
+function restartPrepositionGame() {
+  mistakes = [];
+  // Restore the original game UI and allow user to pick question count again
+  document.getElementById('sentence-game').innerHTML = `
+    <div style="margin-bottom:1em;">
+      <label for="prep-question-count"><b>How many questions?</b></label>
+      <input type="number" id="prep-question-count" min="1" max="${prepositionQuestions.length}" value="10" style="width:60px;">
+      <button id="prep-start">Start Game</button>
+    </div>
+    <div id="preposition-game" style="display:none;">
+      <p id="prep-question"></p>
+      <select id="prep-options"></select>
+      <button id="prep-submit">Submit</button>
+      <div id="prep-feedback" style="margin-top:10px;"></div>
+      <div id="prep-score" style="margin-top:10px;"></div>
+    </div>
+  `;
+  document.getElementById('prep-start').addEventListener('click', function() {
+    document.getElementById('preposition-game').style.display = '';
+    startPrepositionGame();
+  });
+  document.getElementById('prep-submit').addEventListener('click', handlePrepositionSubmit);
+}
+
+// --- Places Game ---
+const placesQuestions = [
+  {
+    object: "pencil",
+    correct: "pencil case",
+    options: ["pencil case", "table", "bag", "box"]
+  },
+  {
+    object: "book",
+    correct: "bag",
+    options: ["shelf", "bag", "desk", "drawer"]
+  },
+  {
+    object: "apple",
+    correct: "basket",
+    options: ["basket", "fridge", "table", "pocket"]
+  },
+  {
+    object: "shoes",
+    correct: "shoe rack",
+    options: ["shoe rack", "bed", "box", "shelf"]
+  },
+  {
+    object: "ball",
+    correct: "box",
+    options: ["box", "pencil case", "bag", "drawer"]
+  },
+  {
+    object: "hat",
+    correct: "head",
+    options: ["head", "table", "bag", "shelf"]
+  },
+  {
+    object: "milk",
+    correct: "fridge",
+    options: ["fridge", "table", "basket", "bag"]
+  },
+  {
+    object: "spoon",
+    correct: "drawer",
+    options: ["drawer", "table", "bag", "box"]
+  },
+  {
+    object: "phone",
+    correct: "pocket",
+    options: ["pocket", "bag", "table", "shelf"]
+  },
+  {
+    object: "towel",
+    correct: "bathroom",
+    options: ["bathroom", "kitchen", "bedroom", "living room"]
+  }
+];
+
+let currentPlace = 0;
+let placeScore = 0;
+
+function showPlacesQuestion() {
+  const q = placesQuestions[currentPlace];
+  document.getElementById('places-question').textContent = `Where does the ${q.object} go?`;
+  const optionsDiv = document.getElementById('places-options');
+  optionsDiv.innerHTML = '';
+  q.options.forEach(opt => {
+    const label = document.createElement('label');
+    label.style.marginRight = "1em";
+    const radio = document.createElement('input');
+    radio.type = "radio";
+    radio.name = "place-option";
+    radio.value = opt;
+    label.appendChild(radio);
+    label.appendChild(document.createTextNode(" " + opt));
+    optionsDiv.appendChild(label);
+  });
+  document.getElementById('places-feedback').textContent = '';
+}
+
+function handlePlacesSubmit() {
+  const q = placesQuestions[currentPlace];
+  const selected = document.querySelector('input[name="place-option"]:checked');
+  const feedback = document.getElementById('places-feedback');
+  if (!selected) {
+    feedback.textContent = "Please select an option!";
+    feedback.style.color = "orange";
+    return;
+  }
+  if (selected.value === q.correct) {
+    feedback.textContent = "✅ Correct!";
+    feedback.style.color = "green";
+    placeScore++;
+  } else {
+    feedback.textContent = `❌ Incorrect. The correct place is "${q.correct}".`;
+    feedback.style.color = "red";
+  }
+  document.getElementById('places-score').textContent = `Score: ${placeScore} / ${placesQuestions.length}`;
+  setTimeout(() => {
+    currentPlace++;
+    if (currentPlace < placesQuestions.length) {
+      showPlacesQuestion();
+    } else {
+      document.getElementById('places-game').innerHTML = `<h3>Game Over!</h3><p>Your final score: ${placeScore} / ${placesQuestions.length}</p><button onclick="restartPlacesGame()">Play Again</button>`;
+    }
+  }, 1200);
+}
+
+function restartPlacesGame() {
+  currentPlace = 0;
+  placeScore = 0;
+  document.getElementById('places-game').innerHTML = `
+    <div id="places-question"></div>
+    <div id="places-options" style="margin: 1em 0;"></div>
+    <button id="places-submit">Submit</button>
+    <div id="places-feedback" style="margin-top:10px;"></div>
+    <div id="places-score" style="margin-top:10px;"></div>
+  `;
+  document.getElementById('places-submit').addEventListener('click', handlePlacesSubmit);
+  showPlacesQuestion();
+}
+
+// --- Visual Drag-and-Drop Places Game (Shapes Only) ---
+const dragPlacesQuestions = [
+  {
+    object: "ball",
+    target: "table",
+    preposition: "on",
+    dropId: "drop-on"
+  },
+  {
+    object: "ball",
+    target: "table",
+    preposition: "under",
+    dropId: "drop-under"
+  },
+  {
+    object: "ball",
+    target: "box",
+    preposition: "in",
+    dropId: "drop-in"
+  }
+];
+
+let dragCurrent = 0;
+let dragScore = 0;
+
+function showDragPlacesQuestion() {
+  const q = dragPlacesQuestions[dragCurrent];
+  document.getElementById('places-prompt').textContent = `Put the ball ${q.preposition} the ${q.target}.`;
+  document.getElementById('places-feedback').textContent = '';
+  document.getElementById('places-next').style.display = 'none';
+  document.getElementById('places-score').textContent = `Score: ${dragScore} / ${dragPlacesQuestions.length}`;
+
+  // Reset ball position and show
+  const ball = document.getElementById('places-ball');
+  ball.style.left = "10px";
+  ball.style.top = "60px";
+  ball.style.display = "";
+
+  // Show/hide table and box
+  document.getElementById('places-table').style.display = (q.target === "table") ? "block" : "none";
+  document.getElementById('places-box').style.display = (q.target === "box") ? "block" : "none";
+
+  // Show/hide drop zones
+  document.getElementById('drop-on').style.display = (q.preposition === "on" && q.target === "table") ? "block" : "none";
+  document.getElementById('drop-under').style.display = (q.preposition === "under" && q.target === "table") ? "block" : "none";
+  document.getElementById('drop-in').style.display = (q.preposition === "in" && q.target === "box") ? "block" : "none";
+
+  // Reset drop zone highlights
+  ["drop-on", "drop-under", "drop-in"].forEach(id => {
+    document.getElementById(id).style.background = "";
+  });
+}
+
+function setupDragAndDrop() {
+  const ball = document.getElementById('places-ball');
+  ["drop-on", "drop-under", "drop-in"].forEach(id => {
+    const dropZone = document.getElementById(id);
+    dropZone.ondragover = function(e) {
+      e.preventDefault();
+      dropZone.style.background = "#e0f7fa";
+    };
+    dropZone.ondragleave = function() {
+      dropZone.style.background = "";
+    };
+    dropZone.ondrop = function(e) {
+      e.preventDefault();
+      dropZone.style.background = "";
+      handleDrop(id);
+    };
+  });
+  ball.ondragstart = function(e) {
+    e.dataTransfer.setData("text/plain", "dragging");
+  };
+}
+
+function handleDrop(dropId) {
+  const q = dragPlacesQuestions[dragCurrent];
+  const feedback = document.getElementById('places-feedback');
+  if (dropId === q.dropId) {
+    feedback.textContent = "✅ Correct!";
+    feedback.style.color = "green";
+    dragScore++;
+    document.getElementById('places-ball').style.display = "none";
+    document.getElementById('places-next').style.display = "inline-block";
+    document.getElementById('places-score').textContent = `Score: ${dragScore} / ${dragPlacesQuestions.length}`;
+  } else {
+    feedback.textContent = `❌ Try again!`;
+    feedback.style.color = "red";
+  }
+}
+
+document.getElementById('places-next').onclick = function() {
+  dragCurrent++;
+  if (dragCurrent < dragPlacesQuestions.length) {
+    showDragPlacesQuestion();
+  } else {
+    document.getElementById('places-prompt').textContent = "Game Over!";
+    document.getElementById('places-drag-area').style.display = "none";
+    document.getElementById('places-feedback').textContent = `Your final score: ${dragScore} / ${dragPlacesQuestions.length}`;
+    document.getElementById('places-next').style.display = "none";
+  }
+};
+
+function restartDragPlacesGame() {
+  dragCurrent = 0;
+  dragScore = 0;
+  document.getElementById('places-drag-area').style.display = "";
+  showDragPlacesQuestion();
+}
+
+// --- Tab Logic ---
+document.addEventListener('DOMContentLoaded', function() {
+  // Tabs
+  document.getElementById('tab-sentences').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('tab-places').classList.remove('active');
+    document.getElementById('sentence-game').style.display = '';
+    document.getElementById('places-game').style.display = 'none';
+  });
+  document.getElementById('tab-places').addEventListener('click', function() {
+    this.classList.add('active');
+    document.getElementById('tab-sentences').classList.remove('active');
+    document.getElementById('sentence-game').style.display = 'none';
+    document.getElementById('places-game').style.display = '';
+  });
+
+  // Sentence game start
+  document.getElementById('prep-start').addEventListener('click', function() {
+    document.getElementById('preposition-game').style.display = '';
+    startPrepositionGame();
+  });
+  document.getElementById('prep-submit').addEventListener('click', handlePrepositionSubmit);
+
+  // Places game
+  document.getElementById('places-submit').addEventListener('click', handlePlacesSubmit);
+  showPlacesQuestion();
+
+  // Setup drag-and-drop
+  setupDragAndDrop();
+  showDragPlacesQuestion();
+});
+</script>
+</body>
+</html>

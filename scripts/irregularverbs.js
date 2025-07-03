@@ -545,3 +545,88 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameContainer = document.getElementById('gameContainer');
     if (gameContainer) gameContainer.style.display = 'none';
 });
+
+// Example verbs array (use your real one if you have it in irregularverbs.js)
+const irregularVerbs = [
+  { base: "be", past: "was/were" },
+  { base: "become", past: "became" },
+  { base: "begin", past: "began" },
+  { base: "break", past: "broke" },
+  { base: "bring", past: "brought" },
+  { base: "build", past: "built" },
+  { base: "buy", past: "bought" },
+  { base: "catch", past: "caught" },
+  { base: "choose", past: "chose" },
+  { base: "come", past: "came" },
+  { base: "cost", past: "cost" },
+  { base: "cut", past: "cut" },
+  { base: "do", past: "did" },
+  { base: "draw", past: "drew" },
+  { base: "drink", past: "drank" },
+  { base: "drive", past: "drove" },
+  { base: "eat", past: "ate" },
+  { base: "fall", past: "fell" },
+  { base: "feel", past: "felt" },
+  { base: "find", past: "found" },
+  { base: "fly", past: "flew" },
+  { base: "forget", past: "forgot" },
+  { base: "get", past: "got" },
+  { base: "give", past: "gave" },
+  { base: "go", past: "went" },
+  { base: "have", past: "had" },
+  { base: "hear", past: "heard" },
+  { base: "keep", past: "kept" },
+  { base: "know", past: "knew" },
+  { base: "leave", past: "left" }
+  // ...add more as needed
+];
+
+let quizVerbs = [];
+let quizIndex = 0;
+let quizScore = 0;
+
+document.getElementById('startIrregularQuizBtn').addEventListener('click', function() {
+  const count = parseInt(document.getElementById('verbCountSelect').value, 10);
+  quizVerbs = irregularVerbs.slice(0, count);
+  quizIndex = 0;
+  quizScore = 0;
+  document.getElementById('irregularQuizSection').style.display = '';
+  document.getElementById('irregularQuizFeedback').textContent = '';
+  document.getElementById('irregularQuizScore').textContent = '';
+  showIrregularQuizQuestion();
+});
+
+function showIrregularQuizQuestion() {
+  if (quizIndex < quizVerbs.length) {
+    const verb = quizVerbs[quizIndex];
+    document.getElementById('irregularQuizQuestion').innerHTML = `What is the <b>past simple</b> of <b>${verb.base}</b>?`;
+    document.getElementById('irregularQuizInput').value = '';
+    document.getElementById('irregularQuizInput').focus();
+  } else {
+    document.getElementById('irregularQuizQuestion').innerHTML = `<b>Quiz finished!</b>`;
+    document.getElementById('irregularQuizInput').style.display = 'none';
+    document.getElementById('irregularQuizSubmit').style.display = 'none';
+    document.getElementById('irregularQuizFeedback').innerHTML = `Your score: <b>${quizScore} / ${quizVerbs.length}</b>`;
+    document.getElementById('irregularQuizScore').innerHTML = `<button onclick="restartIrregularQuiz()">Play Again</button>`;
+  }
+}
+
+document.getElementById('irregularQuizSubmit').addEventListener('click', function() {
+  const userAnswer = document.getElementById('irregularQuizInput').value.trim().toLowerCase();
+  const correct = quizVerbs[quizIndex].past.toLowerCase();
+  if (userAnswer === correct) {
+    document.getElementById('irregularQuizFeedback').innerHTML = `<span style="color:green;">✅ Correct!</span>`;
+    quizScore++;
+  } else {
+    document.getElementById('irregularQuizFeedback').innerHTML = `<span style="color:red;">❌ Correct answer: <b>${quizVerbs[quizIndex].past}</b></span>`;
+  }
+  quizIndex++;
+  setTimeout(showIrregularQuizQuestion, 1200);
+});
+
+function restartIrregularQuiz() {
+  document.getElementById('irregularQuizInput').style.display = '';
+  document.getElementById('irregularQuizSubmit').style.display = '';
+  document.getElementById('irregularQuizScore').innerHTML = '';
+  document.getElementById('irregularQuizSection').style.display = 'none';
+}

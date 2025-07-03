@@ -163,12 +163,26 @@ button:hover { background-color: var(--button-hover-bg); }
     margin-top: 1rem;
 }
 .category { color: var(--category-color); font-size: 0.875rem; margin-top: 0.5rem; }
-.delete-btn {
-    background-color: var(--delete-btn-bg);
-    padding: 0.5rem;
+/* Delete button style (red) */
+.delete-btn,
+.delete-category-btn {
+    background-color: var(--delete-btn-bg) !important;
+    color: #fff !important;
+    border-radius: 6px;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
     margin-top: 0.5rem;
+    transition: background 0.2s, transform 0.2s;
 }
-.delete-btn:hover { background-color: var(--delete-btn-hover-bg); }
+
+.delete-btn:hover,
+.delete-category-btn:hover {
+    background-color: var(--delete-btn-hover-bg) !important;
+    color: #fff !important;
+    transform: scale(1.04);
+}
 .fade-in { animation: fadeIn 0.5s ease-in; }
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -826,4 +840,92 @@ section {
 [data-theme="dark"] .flip-card-back {
     /* Ensures text is centered and readable */
     text-align: center;
+}
+
+/* Make the Manage Categories section compact but full width */
+#manageCategoriesSection.section {
+    padding: 1rem 2rem; /* less vertical padding, same horizontal as others */
+    margin-bottom: 1.5rem; /* less space below */
+}
+
+/* Remove conflicting widths from inner elements */
+.entry-forms,
+.manage-categories {
+    flex: 1 1 0;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: transparent;
+    width: 100%;         /* Ensure full width */
+    max-width: 100%;     /* Remove any max-width restriction */
+    box-sizing: border-box;
+}
+
+#addWordForm,
+.custom-category,
+.add-category-row {
+    width: 100%;         /* Ensure full width */
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.custom-category input,
+.add-category-row input {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;     /* Remove previous max-width */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Remove these lines if present elsewhere: */
+/*
+#manageCategoriesSection .custom-category input {
+    width: 60%;
+    max-width: 350px;
+    min-width: 180px;
+}
+#category, #newCategory {
+    width: 60%;
+    min-width: 120px;
+    max-width: 220px;
+}
+*/
+
+/* Responsive: keep 100% width on mobile */
+@media (max-width: 800px) {
+    .dictionary-entry-block,
+    .manage-categories-block,
+    #dictionarySection.section,
+    #manageCategoriesSection.section {
+        max-width: 98vw;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    .entry-forms,
+    .manage-categories {
+        padding: 1rem 0.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    .custom-category input,
+    .add-category-row input {
+        font-size: 1rem;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+/* --- Button and Input Consistency in Dark Mode --- */
+[data-theme="dark"] .custom-category input,
+[data-theme="dark"] .add-category-row input {
+    background: var(--section-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+[data-theme="dark"] .custom-category button,
+[data-theme="dark"] .add-category-row button {
+    background: var(--button-bg);
+    color: var(--button-text);
 }

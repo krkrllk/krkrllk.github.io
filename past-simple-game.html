@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Past Simple Game: Regular Verbs</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<header>
+  <nav class="header-nav">
+    <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+    <a href="index.html" class="back-link">Back to Main</a>
+  </nav>
+  <h1>Past Simple: Regular Verbs</h1>
+  <p>Fill in the blanks with the correct <strong>past simple</strong> form of the verbs in brackets.</p>
+</header>
+<div class="container">
+  <div class="game-tabs" style="margin-bottom:1em;">
+    <button id="tab-fill" class="active">Fill in the Blanks</button>
+    <button id="tab-mc">Multiple Choice</button>
+    <button id="tab-fix">Find the Mistake</button>
+    <button id="tab-fill2">Fill in the Blanks 2</button>
+  </div>
+
+  <!-- Game 1: Fill in the blanks -->
+  <div id="game-fill">
+    <div class="exercise">
+      One Saturday morning in Seattle, Ken
+      <input type="text" id="q1" placeholder="…" style="width:80px; display:inline;"> (stop) in front of the Café Brioche and
+      <input type="text" id="q2" placeholder="…" style="width:80px; display:inline;"> (study) the menu in the window. He
+      <input type="text" id="q3" placeholder="…" style="width:80px; display:inline;"> (enter) the café and
+      <input type="text" id="q4" placeholder="…" style="width:80px; display:inline;"> (order) lunch.
+    </div>
+    <div class="exercise">
+      He <input type="text" id="q5" placeholder="…" style="width:80px; display:inline;"> (wait) for the waiter, then
+      <input type="text" id="q6" placeholder="…" style="width:80px; display:inline;"> (enjoy) his meal. After that, he
+      <input type="text" id="q7" placeholder="…" style="width:80px; display:inline;"> (walk) to the park and
+      <input type="text" id="q8" placeholder="…" style="width:80px; display:inline;"> (talk) to his friend.
+    </div>
+    <div class="exercise">
+      Later, Ken <input type="text" id="q9" placeholder="…" style="width:80px; display:inline;"> (visit) a museum and
+      <input type="text" id="q10" placeholder="…" style="width:80px; display:inline;"> (watch) a movie. He
+      <input type="text" id="q11" placeholder="…" style="width:80px; display:inline;"> (play) chess in the evening and
+      <input type="text" id="q12" placeholder="…" style="width:80px; display:inline;"> (enjoy) his day.
+    </div>
+    <button onclick="checkAnswers()">Check Answers</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <!-- Game 2: Multiple Choice -->
+  <div id="game-mc" style="display:none;">
+    <div class="exercise">
+      Yesterday, Anna <select id="mc1">
+        <option value="">--choose--</option>
+        <option value="played">played</option>
+        <option value="play">play</option>
+        <option value="playing">playing</option>
+      </select> (play) tennis with her friends.
+    </div>
+    <div class="exercise">
+      They <select id="mc2">
+        <option value="">--choose--</option>
+        <option value="enjoyed">enjoyed</option>
+        <option value="enjoy">enjoy</option>
+        <option value="enjoys">enjoys</option>
+      </select> (enjoy) the sunny weather.
+    </div>
+    <div class="exercise">
+      After the game, Anna <select id="mc3">
+        <option value="">--choose--</option>
+        <option value="walked">walked</option>
+        <option value="walk">walk</option>
+        <option value="walking">walking</option>
+      </select> (walk) home and <select id="mc4">
+        <option value="">--choose--</option>
+        <option value="cooked">cooked</option>
+        <option value="cook">cook</option>
+        <option value="cooking">cooking</option>
+      </select> (cook) dinner.
+    </div>
+    <button onclick="checkMC()">Check Answers</button>
+    <div id="result-mc" class="result"></div>
+  </div>
+
+  <!-- Game 3: Find the Mistake -->
+  <div id="game-fix" style="display:none;">
+    <div class="exercise">
+      1. Yesterday, I <input type="text" id="fix1" value="walk" style="width:80px; display:inline;"> (walk) to school.
+    </div>
+    <div class="exercise">
+      2. My sister <input type="text" id="fix2" value="study" style="width:80px; display:inline;"> (study) for her test last night.
+    </div>
+    <div class="exercise">
+      3. We <input type="text" id="fix3" value="play" style="width:80px; display:inline;"> (play) football in the park.
+    </div>
+    <div class="exercise">
+      4. They <input type="text" id="fix4" value="enjoy" style="width:80px; display:inline;"> (enjoy) the movie.
+    </div>
+    <button onclick="checkFix()">Check Answers</button>
+    <div id="result-fix" class="result"></div>
+  </div>
+
+  <!-- Game 4: Fill in the blanks 2 -->
+  <div id="game-fill2" style="display:none;">
+    <div class="exercise">
+      Last summer, Tom
+      <input type="text" id="q13" placeholder="…" style="width:80px; display:inline;"> (visit) his cousin in the countryside. Every morning, they
+      <input type="text" id="q14" placeholder="…" style="width:80px; display:inline;"> (clean) the house and
+      <input type="text" id="q15" placeholder="…" style="width:80px; display:inline;"> (help) Tom's uncle on the farm. Tom
+      <input type="text" id="q16" placeholder="…" style="width:80px; display:inline;"> (water) the plants and
+      <input type="text" id="q17" placeholder="…" style="width:80px; display:inline;"> (collect) eggs from the chickens.
+    </div>
+    <div class="exercise">
+      In the afternoons, they
+      <input type="text" id="q18" placeholder="…" style="width:80px; display:inline;"> (play) football with friends and
+      <input type="text" id="q19" placeholder="…" style="width:80px; display:inline;"> (watch) cartoons. Tom
+      <input type="text" id="q20" placeholder="…" style="width:80px; display:inline;"> (enjoy) the fresh air and
+      <input type="text" id="q21" placeholder="…" style="width:80px; display:inline;"> (laugh) a lot. In the evenings, they
+      <input type="text" id="q22" placeholder="…" style="width:80px; display:inline;"> (cook) dinner together and
+      <input type="text" id="q23" placeholder="…" style="width:80px; display:inline;"> (talk) about their day. Tom
+      <input type="text" id="q24" placeholder="…" style="width:80px; display:inline;"> (promise) to visit again next year.
+    </div>
+    <button onclick="checkAnswers2()">Check Answers</button>
+    <div id="result2" class="result"></div>
+  </div>
+</div>
+<script src="scripts/theme.js"></script>
+<script>
+// Tab logic
+document.getElementById('tab-fill').onclick = function() {
+  this.classList.add('active');
+  document.getElementById('tab-mc').classList.remove('active');
+  document.getElementById('tab-fix').classList.remove('active');
+  document.getElementById('game-fill').style.display = '';
+  document.getElementById('game-mc').style.display = 'none';
+  document.getElementById('game-fix').style.display = 'none';
+  document.getElementById('game-fill2').style.display = 'none';
+};
+document.getElementById('tab-mc').onclick = function() {
+  this.classList.add('active');
+  document.getElementById('tab-fill').classList.remove('active');
+  document.getElementById('tab-fix').classList.remove('active');
+  document.getElementById('game-fill').style.display = 'none';
+  document.getElementById('game-mc').style.display = '';
+  document.getElementById('game-fix').style.display = 'none';
+  document.getElementById('game-fill2').style.display = 'none';
+};
+document.getElementById('tab-fix').onclick = function() {
+  this.classList.add('active');
+  document.getElementById('tab-fill').classList.remove('active');
+  document.getElementById('tab-mc').classList.remove('active');
+  document.getElementById('game-fill').style.display = 'none';
+  document.getElementById('game-mc').style.display = 'none';
+  document.getElementById('game-fix').style.display = '';
+  document.getElementById('game-fill2').style.display = 'none';
+};
+document.getElementById('tab-fill2').onclick = function() {
+  this.classList.add('active');
+  document.getElementById('tab-fill').classList.remove('active');
+  document.getElementById('tab-mc').classList.remove('active');
+  document.getElementById('tab-fix').classList.remove('active');
+  document.getElementById('game-fill').style.display = 'none';
+  document.getElementById('game-mc').style.display = 'none';
+  document.getElementById('game-fix').style.display = 'none';
+  document.getElementById('game-fill2').style.display = '';
+};
+
+// Game 1: Fill in the blanks
+const correctAnswers = {
+  q1: "stopped",
+  q2: "studied",
+  q3: "entered",
+  q4: "ordered",
+  q5: "waited",
+  q6: "enjoyed",
+  q7: "walked",
+  q8: "talked",
+  q9: "visited",
+  q10: "watched",
+  q11: "played",
+  q12: "enjoyed"
+};
+
+function checkAnswers() {
+  let score = 0;
+  let total = Object.keys(correctAnswers).length;
+  for (let key in correctAnswers) {
+    let userInput = document.getElementById(key).value.trim().toLowerCase();
+    if (userInput === correctAnswers[key]) {
+      document.getElementById(key).style.borderColor = "green";
+      score++;
+    } else {
+      document.getElementById(key).style.borderColor = "red";
+    }
+  }
+  let result = document.getElementById("result");
+  if (score === total) {
+    result.innerHTML = `<span class="correct">Perfect! You got all ${score} correct ✅</span>`;
+  } else {
+    result.innerHTML = `<span class="incorrect">You got ${score} out of ${total} correct. Try again!</span>`;
+  }
+}
+
+// Game 2: Multiple Choice
+const mcAnswers = {
+  mc1: "played",
+  mc2: "enjoyed",
+  mc3: "walked",
+  mc4: "cooked"
+};
+function checkMC() {
+  let score = 0;
+  let total = Object.keys(mcAnswers).length;
+  for (let key in mcAnswers) {
+    let userInput = document.getElementById(key).value;
+    if (userInput === mcAnswers[key]) {
+      document.getElementById(key).style.borderColor = "green";
+      score++;
+    } else {
+      document.getElementById(key).style.borderColor = "red";
+    }
+  }
+  let result = document.getElementById("result-mc");
+  if (score === total) {
+    result.innerHTML = `<span class="correct">Perfect! You got all ${score} correct ✅</span>`;
+  } else {
+    result.innerHTML = `<span class="incorrect">You got ${score} out of ${total} correct. Try again!</span>`;
+  }
+}
+
+// Game 3: Find the Mistake
+const fixAnswers = {
+  fix1: "walked",
+  fix2: "studied",
+  fix3: "played",
+  fix4: "enjoyed"
+};
+function checkFix() {
+  let score = 0;
+  let total = Object.keys(fixAnswers).length;
+  for (let key in fixAnswers) {
+    let userInput = document.getElementById(key).value.trim().toLowerCase();
+    if (userInput === fixAnswers[key]) {
+      document.getElementById(key).style.borderColor = "green";
+      score++;
+    } else {
+      document.getElementById(key).style.borderColor = "red";
+    }
+  }
+  let result = document.getElementById("result-fix");
+  if (score === total) {
+    result.innerHTML = `<span class="correct">Perfect! You got all ${score} correct ✅</span>`;
+  } else {
+    result.innerHTML = `<span class="incorrect">You got ${score} out of ${total} correct. Try again!</span>`;
+  }
+}
+
+// Game 4: Fill in the blanks 2
+const correctAnswers2 = {
+  q13: "visited",
+  q14: "cleaned",
+  q15: "helped",
+  q16: "watered",
+  q17: "collected",
+  q18: "played",
+  q19: "watched",
+  q20: "enjoyed",
+  q21: "laughed",
+  q22: "cooked",
+  q23: "talked",
+  q24: "promised"
+};
+
+function checkAnswers2() {
+  let score = 0;
+  let total = Object.keys(correctAnswers2).length;
+  for (let key in correctAnswers2) {
+    let userInput = document.getElementById(key).value.trim().toLowerCase();
+    if (userInput === correctAnswers2[key]) {
+      document.getElementById(key).style.borderColor = "green";
+      score++;
+    } else {
+      document.getElementById(key).style.borderColor = "red";
+    }
+  }
+  let result = document.getElementById("result2");
+  if (score === total) {
+    result.innerHTML = `<span class="correct">Perfect! You got all ${score} correct ✅</span>`;
+  } else {
+    result.innerHTML = `<span class="incorrect">You got ${score} out of ${total} correct. Try again!</span>`;
+  }
+}
+</script>
+</body>
+</html>

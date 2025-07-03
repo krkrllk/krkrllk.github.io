@@ -9,29 +9,35 @@
   <nav class="header-nav">
     <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
     <a href="irregular-verbs.html" class="back-link">Irregular Verbs</a>
+    <a href="prepositions.html" class="back-link">Preposition Game</a>
+    <a href="past-simple-game.html" class="back-link">Past Simple Game</a>
   </nav>
-  <h1>VocabMaster Pro1111</h1>
+  <h1>VocabMaster Pro</h1>
   <p>Master Languages Through Interactive Learning</p>
 </header>
 
         <div class="container">
-            <div class="section">
-                <form id="addWordForm" onsubmit="handleSubmit(event)">
-                    <input type="text" id="word" placeholder="Enter word" required>
-                    <input type="text" id="translation" placeholder="Enter translation" required>
-                    <select id="category" required></select>
-                    <button type="submit">Add Word</button>
-                </form>
-                <div id="message"></div>
+            <div class="section dictionary-entry-block">
+    <div class="entry-forms">
+        <form id="addWordForm" onsubmit="handleSubmit(event)">
+            <input type="text" id="word" placeholder="Enter word" required>
+            <input type="text" id="translation" placeholder="Enter translation" required>
+            <div class="category-row">
+                <select id="category" required></select>
+                <button type="submit">Add Word</button>
             </div>
-            <div class="section">
-                <h2>Manage Categories</h2>
-                <div class="custom-category">
-                    <input type="text" id="newCategory" placeholder="Enter new category">
-                    <button onclick="addCustomCategory()">Add Category</button>
-                </div>
-                <div id="categoryFolders" class="category-folders"></div>
-            </div>
+        </form>
+        <div id="message"></div>
+    </div>
+    <div class="manage-categories-block">
+      <div class="add-category-row">
+        <input type="text" id="addCategoryInput" placeholder="Add new category">
+        <button type="button" id="addCategoryBtn">Add</button>
+        <button id="toggleManageCategoriesBtn">Hide Categories</button>
+      </div>
+      <div id="categoryFolders" class="category-folders"></div>
+    </div>
+</div>
             <div class="section">
                 <h2>Your Dictionary</h2>
                 <button id="toggleDictionaryBtn" onclick="toggleDictionary()" style="margin-bottom:10px;">Show Dictionary</button>
@@ -43,55 +49,28 @@
                 <div id="dictionaryGrid" style="display:none;">
                     <!-- Words will be added here -->
                 </div>
+                <button id="toggleImportExportBtn" onclick="toggleImportExport()" style="margin-top:15px;">Show Import/Export</button>
+                <div id="importExportSection" style="display:none; margin-top:1rem;">
+                    <div id="importExportPalette" style="margin-bottom:1rem;">
+                        <strong>How to add words:</strong>
+                        <div style="background:#f3f6fa;padding:0.5em 1em;border-radius:6px;margin:0.5em 0;">
+                            <span style="display:inline-block;width:120px;"><b>Word</b></span>
+                            <span style="display:inline-block;width:120px;"><b>Translation</b></span>
+                            <span style="display:inline-block;width:120px;"><b>Category</b></span>
+                        </div>
+                        <span style="color:#888;">Example: <b>apple,</b>  <b>яблуко,</b> <b>general</b></span>
+                    </div>
+                    <h3>Import/Export Dictionary (Text Format)</h3>
+                    <textarea id="dictionaryTextArea" rows="8" style="width:100%;" placeholder="word,translation,category"></textarea>
+                    <div style="margin-top:10px;">
+                        <button onclick="importDictionaryFromText()">Import from Text</button>
+                        <button onclick="exportDictionaryToText()">Export to Text</button>
+                    </div>
+                    <div id="importMessage"></div>
+                </div>
             </div>
 
-        <div class="section">
-            <h2>Your Dictionary</h2>
-            <div id="importExportPalette" style="margin-bottom:1rem;">
-    <strong>How to add words:</strong>
-    <div style="background:#f3f6fa;padding:0.5em 1em;border-radius:6px;margin:0.5em 0;">
-        <span style="display:inline-block;width:120px;"><b>Word</b></span>
-        <span style="display:inline-block;width:120px;"><b>Translation</b></span>
-        <span style="display:inline-block;width:120px;"><b>Category</b></span>
-    </div>
-    <span style="color:#888;">Example: <b>apple,</b>  <b>яблуко,</b> <b>general</b></span>
-</div>
-<!-- Paste this where you want the import/export controls -->
-<div class="section">
-  <h2>Import/Export Dictionary (Text Format)</h2>
-  <textarea id="dictionaryTextArea" rows="8" style="width:100%;" placeholder="word,translation,category"></textarea>
-  <div style="margin-top:10px;">
-    <button onclick="importDictionaryFromText()">Import from Text</button>
-    <button onclick="exportDictionaryToText()">Export to Text</button>
-  </div>
-  <div id="importMessage"></div>
-</div>
-<div id="wordEditorModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:1000;align-items:center;justify-content:center;">
-    <div style="background:#fff;padding:2em;border-radius:10px;max-width:600px;width:95vw;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
-        <h3>Edit Your Words</h3>
-        <table id="wordEditorTable" style="width:100%;margin-bottom:1em;">
-            <thead>
-                <tr>
-                    <th>Word</th>
-                    <th>Translation</th>
-                    <th>Category</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows will be filled by JS -->
-            </tbody>
-        </table>
-        <button onclick="addWordEditorRow()">Add Row</button>
-        <button onclick="saveWordEditor()">Save</button>
-        <button onclick="closeWordEditor()">Cancel</button>
-    </div>
-</div>
 
-            <div id="dictionaryGrid">
-                <!-- Words will be added here -->
-            </div>
-        </div>
 
                 <h2>Learning Center</h2>
                 <div class="learning-tabs">
