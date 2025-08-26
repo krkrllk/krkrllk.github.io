@@ -64,6 +64,63 @@ function closeWordEditor() {
     document.getElementById('wordEditorModal').style.display = 'none';
 }
 
+// Robust CSV parser for a single line
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (inQuotes) {
+            if (char === '"') {
+                if (line[i + 1] === '"') {
+                    current += '"';
+                    i++;
+                } else {
+                    inQuotes = false;
+                }
+            } else {
+                current += char;
+            }
+        } else {
+            if (char === '"') {
+                inQuotes = true;
+            } else if (char === ',') {
+                result.push(current);
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+    }
+    result.push(current);
+    return result;
+}
+
+// Export to textarea (robust CSV)
+function exportDictionaryToText() {
+    if (!vocabulary.length) {
+        showMessage("No words to export.", "error");
+        return;
+    }
+    const lines = vocabulary.map(item =>
+        [item.word, item.translation, item.category || "general"]
+            .map(val => {
+                if (val == null) return '';
+                // Quote if contains comma, quote, or newline
+                if (/[",\n\r]/.test(val)) {
+                    // Escape quotes by doubling them
+                    return `"${val.replace(/"/g, '""')}"`;
+                }
+                return val;
+            })
+            .join(',')
+    );
+    document.getElementById('dictionaryTextArea').value = lines.join('\n');
+    showMessage("Exported to text area. You can now copy it!", "success");
+}
+
+// Import from textarea (robust CSV)
 function importDictionaryFromText() {
     const text = document.getElementById('dictionaryTextArea').value.trim();
     if (!text) {
@@ -73,9 +130,8 @@ function importDictionaryFromText() {
     const lines = text.split(/\r?\n/).filter(Boolean);
     let added = 0;
     lines.forEach(line => {
-        // Split by comma, but allow commas in translation if quoted
-        const parts = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-        const [word, translation, category] = parts.map(s => s.replace(/^"|"$/g, '').trim());
+        const parts = parseCSVLine(line);
+        const [word, translation, category] = parts.map(s => s.trim());
         if (word && translation && !vocabulary.some(w => w.word.toLowerCase() === word.toLowerCase() && w.translation === translation)) {
             vocabulary.push({
                 id: Date.now() + Math.random(),
@@ -92,6 +148,7 @@ function importDictionaryFromText() {
     displayDictionary && displayDictionary();
     refreshCategoryDropdowns && refreshCategoryDropdowns();
 
+    // Ensure all categories from vocabulary are in window.categories
     const vocabCategories = Array.from(new Set(vocabulary.map(w => (w.category || "general").toLowerCase())));
     let changed = false;
     vocabCategories.forEach(cat => {
@@ -148,20 +205,5 @@ function refreshCategoryDropdowns() {
             });
         }
     });
-}
-
-// Export to textarea (text format)
-function exportDictionaryToText() {
-    if (!vocabulary.length) {
-        showMessage("No words to export.", "error");
-        return;
-    }
-    const lines = vocabulary.map(item =>
-        [item.word, item.translation, item.category || "general"]
-            .map(val => val && val.includes(',') ? `"${val}"` : val)
-            .join(',')
-    );
-    document.getElementById('dictionaryTextArea').value = lines.join('\n');
-    showMessage("Exported to text area. You can now copy it!", "success");
 }
 

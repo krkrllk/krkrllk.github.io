@@ -421,26 +421,21 @@ button:hover { background-color: var(--button-hover-bg); }
 }
 
 #theme-toggle {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--button-text);
-    padding: 8px 12px; /* Reduced horizontal padding */
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(6px);
-    transition: background 0.3s ease, transform 0.2s ease;
-    min-width: unset; /* Remove any min-width if set elsewhere */
-    width: auto;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #007bff;
+  margin-right: 1em;
+  transition: color 0.2s;
 }
 
 #theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+  color: #0056b3;
+}
+
+body.dark-mode #theme-toggle {
+  color: #90cdf4;
 }
 
 #wordSearchGrid {
@@ -772,7 +767,22 @@ section {
 }
 
 #theme-toggle {
-    right: 16px;
+  background: none;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  color: #007bff;
+  margin-right: 1em;
+  transition: color 0.2s;
+  left: 16px;
+}
+
+#theme-toggle:hover {
+  color: #0056b3;
+}
+
+body.dark-mode #theme-toggle {
+  color: #90cdf4;
 }
 
 .back-link:hover,
@@ -928,4 +938,140 @@ section {
 [data-theme="dark"] .add-category-row button {
     background: var(--button-bg);
     color: var(--button-text);
+}
+
+/* --- Dark mode for quiz/game containers --- */
+[data-theme="dark"] .quiz-question {
+    background: linear-gradient(135deg, #232946 0%, #2d3748 100%) !important;
+    border-color: #4a5568 !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+}
+[data-theme="dark"] .quiz-question p,
+[data-theme="dark"] .quiz-question label {
+    color: var(--text-color) !important;
+}
+[data-theme="dark"] .quiz-options,
+[data-theme="dark"] .quiz-option-row {
+    background: transparent !important;
+}
+[data-theme="dark"] .quiz-option-row {
+    background: #232946 !important;
+    border-color: #4a5568 !important;
+    color: var(--text-color) !important;
+}
+[data-theme="dark"] .quiz-option-row:hover,
+[data-theme="dark"] .quiz-option-row.selected {
+    background: #2d3748 !important;
+    border-color: #667eea !important;
+    color: var(--button-text) !important;
+}
+[data-theme="dark"] .quiz-option-row.correct {
+    background: #22543d !important;
+    border-color: #38a169 !important;
+    color: #c6f6d5 !important;
+}
+[data-theme="dark"] .quiz-option-row.incorrect {
+    background: #4a2020 !important;
+    border-color: #e53e3e !important;
+    color: #fed7d7 !important;
+}
+[data-theme="dark"] .quiz-option-label {
+    color: var(--text-color) !important;
+}
+[data-theme="dark"] #quizResults {
+    background: #2d3748 !important;
+    color: var(--text-color) !important;
+    border-color: #4a5568 !important;
+}
+
+/* Dark mode for #dictionaryTextArea */
+[data-theme="dark"] #dictionaryTextArea {
+    background: var(--section-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+    caret-color: var(--text-color) !important;
+}
+
+/* Optional: Make sure it's styled in light mode too for consistency */
+#dictionaryTextArea {
+    background: var(--section-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: 16px;
+    right: 16px;     /* instead of right: 16px */
+    display: inline-block;
+}
+
+/* ----- DROPDOWN BUTTON ----- */
+.dropbtn {
+  background: none;
+  color: #fff;
+  font-size: 1rem;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+margin-right: 1em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  transition: background 0.3s, color 0.2s, transform 0.2s;
+}
+
+.dropbtn:hover,
+.dropbtn:focus {
+  background: rgba(255, 255, 255, 0.3);
+
+  transform: translateY(-2px);
+}
+
+
+
+.dropdown-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;         /* directly below button */
+  right: 0;          /* align to right edge of button */
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  min-width: 200px;
+  overflow: hidden;
+
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  z-index: 1000;
+}
+
+/* Expanded dropdown */
+.dropdown-content.show {
+  max-height: 500px; /* enough for multiple links */
+  opacity: 1;
+}
+
+/* Dropdown links */
+.dropdown-content a {
+  display: block;
+  padding: 12px 16px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.dropdown-content a:hover {
+  background-color: #f7f7f7;
 }

@@ -164,38 +164,20 @@ function addCategory() {
   input.focus();
 }
 
-// Navigation dropdown handler
-document.addEventListener("DOMContentLoaded", function() {
-  const navDropdown = document.getElementById('navDropdown');
-  if (navDropdown) {
-    navDropdown.addEventListener('change', function() {
-      const selectedValue = this.value;
-      if (selectedValue) {
-        const [tabId, isGame] = selectedValue.split('|');
-        switchTab(tabId);
-        if (isGame === 'true') {
-          // If it's a game, start the game directly
-          const startGameFunc = window[`start${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`];
-          if (typeof startGameFunc === 'function') {
-            startGameFunc();
-          }
-        }
-      }
-    });
-  }
-});
 
-// Dropdown toggle logic (only one instance!)
-document.addEventListener('DOMContentLoaded', function() {
-  const dropbtn = document.querySelector('.dropbtn');
-  const dropdownContent = document.querySelector('.dropdown-content');
-  if (dropbtn && dropdownContent) {
-    dropbtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', function() {
-      dropdownContent.style.display = 'none';
-    });
-  }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const gamesBtn = document.getElementById("games-btn");
+  const dropdownContent = document.querySelector(".dropdown-content");
+
+  gamesBtn.addEventListener("click", () => {
+    dropdownContent.classList.toggle("show");
+  });
+
+  // Optional: close dropdown if clicked outside
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".dropdown")) {
+      dropdownContent.classList.remove("show");
+    }
+  });
 });

@@ -2,26 +2,21 @@ window.wordSearchWords = [];
 window.wordSearchTranslations = [];
 
 window.startWordSearch = function() {
-    const categorySelect = document.getElementById('wordSearchCategory');
-    const countInput = document.getElementById('wordSearchCount');
-    if (!categorySelect || !countInput || !window.vocabulary) return;
+    const category = document.getElementById('wordSearchCategory').value;
+    const count = parseInt(document.getElementById('wordSearchCount').value, 10) || 4;
+    // Dummy words for demonstration; replace with actual category filtering logic
+    const words = ['apple', 'banana', 'cat', 'dog', 'fish', 'house', 'tree', 'book', 'car', 'star'];
+    const selectedWords = words.slice(0, count);
 
-    const category = categorySelect.value;
-    const pairCount = Math.max(2, Math.min(10, parseInt(countInput?.value, 10) || 4)); // default 4 pairs, min 2, max 10
-    let pool = category === 'all' ? [...window.vocabulary] : window.vocabulary.filter(w => w.category === category);
+    // Display words
+    document.getElementById('wordSearchWords').innerHTML = selectedWords.map(w => `<span>${w}</span>`).join(' ');
 
-    if (pool.length < pairCount) {
-        window.showMessage && window.showMessage('Not enough words for selected number', 'error');
-        return;
+    // Generate a simple grid (for demonstration)
+    let grid = '';
+    for (let i = 0; i < count; i++) {
+        grid += '<div>' + selectedWords[i].split('').join(' ') + '</div>';
     }
-
-    pool = window.shuffleArray ? window.shuffleArray(pool) : pool.sort(() => Math.random() - 0.5);
-    const selected = pool.slice(0, pairCount);
-    window.wordSearchWords = selected.map(w => w.word.toUpperCase());
-    window.wordSearchTranslations = selected.map(w => w.translation);
-    window.wordSearchFound = [];
-    window.generateWordSearchGrid();
-    window.renderWordSearch();
+    document.getElementById('wordSearchGrid').innerHTML = grid;
 };
 
 window.generateWordSearchGrid = function() {

@@ -5,16 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VocabMaster Pro</title>
     <link rel="stylesheet" href="styles/main.css">
-<header>
-  <nav class="header-nav">
-    <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
-    <a href="irregular-verbs.html" class="back-link">Irregular Verbs</a>
-    <a href="prepositions.html" class="back-link">Preposition Game</a>
-    <a href="past-simple-game.html" class="back-link">Past Simple Game</a>
-  </nav>
-  <h1>VocabMaster Pro</h1>
-  <p>Master Languages Through Interactive Learning</p>
-</header>
+</head>
+<body>
+    <header>
+  <nav class="navbar">
+        <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+<div class="dropdown">
+  <button class="dropbtn" id="games-btn">Games ▾</button>
+  <div class="dropdown-content">
+    <a href="irregular-verbs.html">Irregular Verbs</a>
+    <a href="prepositions.html">Prepositions</a>
+    <a href="past-simple-game.html">Past Simple Game</a>
+  </div>
+</div>
+
+        </nav>
+        <h1>VocabMaster Pro</h1>
+        <p>Master Languages Through Interactive Learning</p>
+    </header>
 
         <div class="container">
             <div class="section dictionary-entry-block">
@@ -33,9 +41,11 @@
       <div class="add-category-row">
         <input type="text" id="addCategoryInput" placeholder="Add new category">
         <button type="button" id="addCategoryBtn">Add</button>
-        <button id="toggleManageCategoriesBtn">Hide Categories</button>
+        <button id="toggleManageCategories">Hide Categories</button>
       </div>
-      <div id="categoryFolders" class="category-folders"></div>
+      <div class="manage-categories-content">
+        <div id="categoryFolders" class="category-folders"></div>
+      </div>
     </div>
 </div>
             <div class="section">
@@ -76,7 +86,7 @@
                 <div class="learning-tabs">
                     <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
                     <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
-                    <button class="tab-btn" onclick="switchTab('memory')">Memory</button>
+
                     <button class="tab-btn" onclick="switchTab('typing')">Typing</button>
                     <button class="tab-btn" onclick="switchTab('hangman')">Build House</button>
                     <button class="tab-btn" onclick="switchTab('wordSearch')">Word Search</button>
@@ -112,14 +122,7 @@
                     <div id="quizContent"></div>
                     <div id="quizResults"></div>
                 </div>
-                <div id="memory" class="game-container">
-                    <div class="controls">
-                        <select id="memoryCategory"></select>
-                        <input type="number" id="memoryPairCount" min="2" max="10" value="4" style="width:80px" placeholder="Pairs">
-                        <button onclick="startMemoryGame()">Start Memory Game</button>
-                    </div>
-                    <div id="memoryGrid"></div>
-                </div>
+
                 <div id="typing" class="game-container">
                     <div class="controls">
                         <select id="typingCategory"></select>
@@ -145,7 +148,7 @@
                     <div class="controls">
                         <select id="wordSearchCategory"></select>
                         <input type="number" id="wordSearchCount" min="3" max="10" value="4" placeholder="Number of Words">
-                        <button onclick="startWordSearch()">Generate Word Search</button>
+                        <button id="wordSearchBtn" onclick="startWordSearch()">Word Search</button>
                     </div>
                     <div id="wordSearchGrid"></div>
                     <div id="wordSearchWords"></div>
@@ -165,5 +168,31 @@
     <script src="scripts/main.js"></script>
     <script src="scripts/irregularverbs.js"></script>
     <script src="scripts/exportImport.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const btn = document.getElementById('toggleManageCategories');
+  const content = document.querySelector('.manage-categories-content');
+  if (btn && content) {
+    btn.addEventListener('click', function() {
+      if (content.style.display === 'none') {
+        content.style.display = '';
+        btn.textContent = 'Hide Categories';
+      } else {
+        content.style.display = 'none';
+        btn.textContent = 'Show Categories';
+      }
+    });
+  }
+});
+function showDropdown() {
+    var dropdownContent = document.getElementById("dropdown-content");
+    if (dropdownContent.style.display === "none") {
+        dropdownContent.style.display = "block";
+    } else {
+        dropdownContent.style.display = "none";
+    }
+}
+
+</script>
 </body>
 </html>

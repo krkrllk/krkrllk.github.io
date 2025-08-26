@@ -78,6 +78,7 @@ window.irregularVerbsList = [
 
 
 
+
 // --- FLASHCARDS: Only translation, click to flip and see all forms ---
 window.startFlashcardsGame = function() {
     const container = document.getElementById('irregularVerbFlashcardsGame');

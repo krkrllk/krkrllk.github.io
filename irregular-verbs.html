@@ -32,7 +32,7 @@
                 <div id="irregularVerbMemoryGame"></div>
             </div>
         </section>
-    </div>
+
     <script src="scripts/theme.js"></script>
     <script src="scripts/irregularverbs.js"></script>
     <script>
@@ -56,6 +56,25 @@
         document.getElementById('quizGameBtn').addEventListener('click', function() {
             if (window.showGame) window.showGame('quiz');
         });
+
+        function getSelectedRegularVerbCount() {
+            const select = document.getElementById('regularVerbCountSelect');
+            if (!select) return 'all';
+            return select.value;
+        }
+
+        function getRegularVerbsSubset(verbs) {
+            const count = getSelectedRegularVerbCount();
+            if (count === 'all') return verbs;
+            return verbs.slice(0, parseInt(count, 10));
+        }
+
+        // When starting the game:
+        function startTypingGame() {
+            // Assume regularVerbs is your array of verbs
+            const verbsToUse = getRegularVerbsSubset(regularVerbs);
+            // ...use verbsToUse in your game logic...
+        }
     </script>
 </body>
 </html>
