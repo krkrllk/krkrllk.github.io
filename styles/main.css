@@ -627,12 +627,9 @@ body.dark-mode #theme-toggle {
     color: var(--text-color);
 }
 #dictionaryGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 50px;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    transition: max-height 0.3s, opacity 0.3s;
-    overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 #dictionaryGrid > div {
     padding: 0.5rem;
@@ -850,6 +847,22 @@ body.dark-mode #theme-toggle {
 [data-theme="dark"] .flip-card-back {
     /* Ensures text is centered and readable */
     text-align: center;
+}
+
+/* Make edit and delete buttons smaller and less wide */
+.edit-word-btn,
+.delete-btn {
+  padding: 0.15em 0.35em;
+  font-size: 0.82em;
+  border-radius: 4px;
+  min-width: 48px;
+  max-width: 64px;
+  width: auto;
+  margin-left: 0.3em;
+  height: 1.7em;
+  line-height: 1.2;
+  float: right;
+  text-align: center;
 }
 
 /* Make the Manage Categories section compact but full width */
@@ -1074,4 +1087,42 @@ margin-right: 1em;
 
 .dropdown-content a:hover {
   background-color: #f7f7f7;
+}
+.rename-category-btn,
+.edit-word-btn {
+  background: #ffd966;
+  color: #222;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3em 0.8em;
+  margin-left: 0.5em;
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: background 0.2s;
+}
+.rename-category-btn:hover,
+.edit-word-btn:hover {
+  background: #ffeeba;
+}
+.dictionary-row {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 1.08em;
+}
+.dictionary-row span {
+  display: inline;
+}
+.edit-word-btn, .delete-btn {
+  float: right;
+  margin-left: 8px;
+  font-size: 0.95em;
+  padding: 0.15em 0.5em;
+  font-size: 0.82em;
+  border-radius: 4px;
+  margin-left: 0.3em;
+  min-width: unset;
+  height: 1.7em;
+  line-height: 1.2;
 }

@@ -74,41 +74,75 @@ window.displayDictionary = function(wordsToDisplay = window.vocabulary) {
     const grid = document.getElementById('dictionaryGrid');
     if (!grid) return;
     grid.innerHTML = '';
-    if (wordsToDisplay.length === 0) {
-        grid.innerHTML = '<p>No words found. Add some words to your dictionary!</p>';
+    grid.style.display = 'flex';
+    grid.style.flexWrap = 'wrap';
+    grid.style.gap = '16px';
+    wordsToDisplay.forEach((wordObj) => {
+        const row = document.createElement('div');
+        row.className = 'dictionary-row';
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.border = '1px solid #e2e8f0';
+        row.style.borderRadius = '8px';
+        row.style.padding = '8px 16px';
+        row.style.marginBottom = '0';
+        row.style.background = '#fff';
+        row.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
+        row.innerHTML = `
+          <span>
+            <b>${wordObj.word}</b> — ${wordObj.translation} <span style="color:#667eea;">[${wordObj.category}]</span>
+          </span>
+          <button class="edit-word-btn" style="margin-left:10px;" onclick="editWordById(${wordObj.id})">Edit</button>
+          <button class="delete-btn" style="margin-left:5px;" onclick="deleteWord(${wordObj.id})">Delete</button>
+        `;
+        grid.appendChild(row);
+    });
+};
+
+// Edit by id (since vocabulary uses id, not index)
+window.editWordById = function(id) {
+    const grid = document.getElementById('dictionaryGrid');
+    const idx = window.vocabulary.findIndex(w => w.id === id);
+    if (idx === -1) return;
+    const wordObj = window.vocabulary[idx];
+    const row = grid.children[idx];
+    row.innerHTML = `
+      <input type="text" value="${wordObj.word}" id="editWord${id}" style="width:100px;">
+      <input type="text" value="${wordObj.translation}" id="editTranslation${id}" style="width:100px;">
+      <input type="text" value="${wordObj.category}" id="editCategory${id}" style="width:100px;">
+      <button onclick="saveWordEditById(${id})">Save</button>
+      <button onclick="displayDictionary()">Cancel</button>
+    `;
+};
+
+window.saveWordEditById = function(id) {
+    const idx = window.vocabulary.findIndex(w => w.id === id);
+    if (idx === -1) return;
+    const newWord = document.getElementById(`editWord${id}`).value.trim();
+    const newTranslation = document.getElementById(`editTranslation${id}`).value.trim();
+    const newCategory = document.getElementById(`editCategory${id}`).value.trim();
+    if (!newWord || !newTranslation || !newCategory) {
+        alert('All fields required!');
         return;
     }
-    wordsToDisplay.forEach(item => {
-        const wordDiv = document.createElement('div');
-        wordDiv.textContent = item.word;
-        const translationDiv = document.createElement('div');
-        translationDiv.textContent = item.translation;
-        const categoryDiv = document.createElement('div');
-        categoryDiv.textContent = item.category;
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.onclick = () => window.deleteWord(item.id);
-        grid.appendChild(wordDiv);
-        grid.appendChild(translationDiv);
-        grid.appendChild(categoryDiv);
-        grid.appendChild(deleteBtn);
-    });
+    window.vocabulary[idx].word = newWord;
+    window.vocabulary[idx].translation = newTranslation;
+
+    // If new category doesn't exist, add it to dropdowns
+    const allCategories = window.vocabulary.map(w => w.category);
+    if (!allCategories.includes(newCategory)) {
+        window.vocabulary[idx].category = newCategory;
+        window.saveVocabulary();
+        updateAllCategoryDropdowns(); // Update filter dropdown
+        // If you have other category dropdowns, update them too
+        // e.g. updateAddWordCategoryDropdown();
+    } else {
+        window.vocabulary[idx].category = newCategory;
+        window.saveVocabulary();
+    }
+    window.displayDictionary();
+    searchDictionary(); // Refresh filtered view
 };
-
-window.searchDictionary = function() {
-    const searchTerm = document.getElementById('searchWord').value.toLowerCase();
-    const category = document.getElementById('filterCategory').value;
-    const filteredVocab = window.vocabulary.filter(item => {
-        const matchesSearch = item.word.toLowerCase().includes(searchTerm) || item.translation.toLowerCase().includes(searchTerm);
-        const matchesCategory = category === 'all' || item.category === category;
-        return matchesSearch && matchesCategory;
-    });
-    window.displayDictionary(filteredVocab);
-};
-
-window.filterDictionary = function() { window.searchDictionary(); };
-
 
 // Add the verbs if not present
 window.irregularVerbsList.forEach(verb => {
@@ -126,3 +160,80 @@ window.irregularVerbsList.forEach(verb => {
     }
 });
 window.saveVocabulary && window.saveVocabulary();
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('dictionarySearchInput');
+    const categorySelect = document.getElementById('dictionaryCategorySelect');
+    if (searchInput) {
+        searchInput.addEventListener('input', updateDictionaryDisplay);
+    }
+    if (categorySelect) {
+        categorySelect.addEventListener('change', updateDictionaryDisplay);
+    }
+    updateDictionaryDisplay();
+});
+
+function searchDictionary() {
+    const searchValue = document.getElementById('searchWord').value.trim().toLowerCase();
+    const selectedCategory = document.getElementById('filterCategory').value;
+    let filtered = window.vocabulary;
+
+    if (selectedCategory) {
+        filtered = filtered.filter(item => item.category === selectedCategory);
+    }
+    if (searchValue) {
+        filtered = filtered.filter(item =>
+            item.word.toLowerCase().includes(searchValue) ||
+            item.translation.toLowerCase().includes(searchValue)
+        );
+    }
+    window.displayDictionary(filtered);
+}
+
+function filterDictionary() {
+    searchDictionary(); // Just reuse the search logic for filtering
+}
+
+// Optionally, call this after adding/removing words or categories to update the category dropdown:
+function updateCategoryDropdown() {
+    const select = document.getElementById('filterCategory');
+    if (!select) return;
+    const categories = Array.from(new Set(window.vocabulary.map(w => w.category).filter(Boolean)));
+    select.innerHTML = '<option value="">All Categories</option>';
+    categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        select.appendChild(option);
+    });
+}
+
+function updateAllCategoryDropdowns() {
+    const categories = Array.from(new Set(window.vocabulary.map(w => w.category).filter(Boolean)));
+
+    // Update add word form category dropdown
+    const addWordSelect = document.getElementById('category');
+    if (addWordSelect) {
+        addWordSelect.innerHTML = '';
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            addWordSelect.appendChild(option);
+        });
+    }
+
+    // Update filter dropdown above dictionary
+    const filterSelect = document.getElementById('filterCategory');
+    if (filterSelect) {
+        filterSelect.innerHTML = '<option value="">All Categories</option>';
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            filterSelect.appendChild(option);
+        });
+    }
+}
+
+// After adding/removing words, call updateCategoryDropdown() and searchDictionary() to refresh the UI.
