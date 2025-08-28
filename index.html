@@ -168,12 +168,29 @@
     <script src="scripts/main.js"></script>
     <script src="scripts/irregularverbs.js"></script>
     <script src="scripts/exportImport.js"></script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // --- Populate categories ---
+  function populateCategorySelect() {
+    const categories = JSON.parse(localStorage.getItem('categories') || '["general"]');
+    const select = document.getElementById('category');
+    if (select) {
+      select.innerHTML = '';
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        select.appendChild(option);
+      });
+    }
+  }
+  populateCategorySelect();
+
+  // --- Toggle category manager ---
   const btn = document.getElementById('toggleManageCategories');
   const content = document.querySelector('.manage-categories-content');
   if (btn && content) {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
       if (content.style.display === 'none') {
         content.style.display = '';
         btn.textContent = 'Hide Categories';
@@ -183,16 +200,95 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-});
-function showDropdown() {
-    var dropdownContent = document.getElementById("dropdown-content");
-    if (dropdownContent.style.display === "none") {
-        dropdownContent.style.display = "block";
-    } else {
-        dropdownContent.style.display = "none";
-    }
-}
 
+  // --- Auto-translate EN -> UK with robust fallbacks ---
+  const wordInput = document.getElementById('word');
+  const translationInput = document.getElementById('translation');
+
+  // Small offline fallback for common words
+  const offlineDict = {
+    dog: 'собака',
+    cat: 'кіт',
+    apple: 'яблуко',
+    hello: 'привіт',
+    book: 'книга',
+    water: 'вода',
+    house: 'будинок'
+  };
+
+  let activeController = null;
+
+  async function translateEnUk(text) {
+    // 1) Try LibreTranslate
+    try {
+      if (activeController) activeController.abort();
+      activeController = new AbortController();
+
+      const res = await fetch('https://libretranslate.de/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ q: text, source: 'en', target: 'uk', format: 'text' }),
+        signal: activeController.signal
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.translatedText) return data.translatedText;
+      }
+    } catch (_) { /* fall through to fallback */ }
+
+    // 2) Offline tiny dictionary
+    const offline = offlineDict[text.toLowerCase()];
+    if (offline) return offline;
+
+    // 3) Try a second free API as a fallback
+    try {
+      if (activeController) activeController.abort();
+      activeController = new AbortController();
+
+      const res2 = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|uk`,
+        { signal: activeController.signal }
+      );
+      if (res2.ok) {
+        const data2 = await res2.json();
+        const t = data2?.responseData?.translatedText;
+        if (t) return t;
+      }
+    } catch (_) { /* final fallback below */ }
+
+    return '';
+  }
+
+  if (wordInput && translationInput) {
+    wordInput.addEventListener('input', async function () {
+      const text = this.value.trim();
+      translationInput.value = '';
+      if (!text) {
+        translationInput.placeholder = 'Enter translation';
+        return;
+      }
+
+      // Remember what was typed at the start of this request
+      const startedWith = this.value;
+
+      // UI feedback
+      translationInput.placeholder = 'Translating...';
+
+      const translated = await translateEnUk(text);
+
+      // Ignore stale result if user kept typing
+      if (this.value !== startedWith) return;
+
+      translationInput.value = translated || '';
+      translationInput.placeholder = translated ? '' : 'Could not translate';
+    });
+  }
+});
 </script>
+
 </body>
 </html>
