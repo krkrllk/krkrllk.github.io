@@ -829,6 +829,62 @@ body.dark-mode #theme-toggle {
     text-align: center;
 }
 
+.voice-btn {
+  margin-left: 4px;
+  margin-right: 4px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 1em; /* Keep readable */
+  padding: 3px; /* Minimal padding */
+  line-height: 1;
+  vertical-align: middle;
+  color: #4a90e2;
+}
+.voice-btn:hover {
+  color: #0077cc;
+}
+
+
+.dictionary-entry {
+  margin: 5px 0;
+}
+
+.voice-btn {
+  margin-left: 10px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 1.2em;
+}
+.voice-btn:hover {
+  color: #0077cc;
+}
+
+
+    #word, #translation {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    .dictionary-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0.6rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .dictionary-entry span {
+      flex: 1;
+    }
+    .dictionary-entry button {
+      margin-left: 0.3rem;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+    }
+
 /* Dark mode styles for Irregular Verbs Flashcards flip card */
 [data-theme="dark"] .flip-card-front,
 [data-theme="dark"] .flip-card-back {

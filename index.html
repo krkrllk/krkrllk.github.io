@@ -1,299 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VocabMaster Pro</title>
-    <link rel="stylesheet" href="styles/main.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VocabMaster Pro</title>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-    <header>
-  <nav class="navbar">
-        <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
-<div class="dropdown">
-  <button class="dropbtn" id="games-btn">Games ▾</button>
-  <div class="dropdown-content">
-    <a href="irregular-verbs.html">Irregular Verbs</a>
-    <a href="prepositions.html">Prepositions</a>
-    <a href="past-simple-game.html">Past Simple Game</a>
-  </div>
-</div>
+  <header>
+    <nav class="navbar">
+      <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      <div class="dropdown">
+        <button class="dropbtn" id="games-btn">Games ▾</button>
+        <div class="dropdown-content">
+          <a href="irregular-verbs.html">Irregular Verbs</a>
+          <a href="prepositions.html">Prepositions</a>
+          <a href="past-simple-game.html">Past Simple Game</a>
+        </div>
+      </div>
+    </nav>
+    <h1>VocabMaster Pro</h1>
+    <p>Master Languages Through Interactive Learning</p>
+  </header>
 
-        </nav>
-        <h1>VocabMaster Pro</h1>
-        <p>Master Languages Through Interactive Learning</p>
-    </header>
-
-        <div class="container">
-            <div class="section dictionary-entry-block">
-    <div class="entry-forms">
+  <div class="container">
+    <div class="section dictionary-entry-block">
+      <div class="entry-forms">
         <form id="addWordForm" onsubmit="handleSubmit(event)">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
             <input type="text" id="word" placeholder="Enter word" required>
-            <input type="text" id="translation" placeholder="Enter translation" required>
-            <div class="category-row">
-                <select id="category" required></select>
-                <button type="submit">Add Word</button>
-            </div>
+            <button type="button" id="speakWordBtn" title="Speak English word"
+              style="padding: 0.5rem; background: #4a90e2; color: white; border: none; border-radius: 4px;">
+              🔊
+            </button>
+          </div>
+          <input type="text" id="translation" placeholder="Enter translation" required>
+          <div class="category-row">
+            <select id="category" required></select>
+            <button type="submit">Add Word</button>
+          </div>
         </form>
         <div id="message"></div>
-    </div>
-    <div class="manage-categories-block">
-      <div class="add-category-row">
-        <input type="text" id="addCategoryInput" placeholder="Add new category">
-        <button type="button" id="addCategoryBtn">Add</button>
-        <button id="toggleManageCategories">Hide Categories</button>
       </div>
-      <div class="manage-categories-content">
-        <div id="categoryFolders" class="category-folders"></div>
-      </div>
-    </div>
-</div>
-            <div class="section">
-                <h2>Your Dictionary</h2>
-                <button id="toggleDictionaryBtn" onclick="toggleDictionary()" style="margin-bottom:10px;">Show Dictionary</button>
-                <div class="controls">
-                    <input type="text" id="searchWord" placeholder="Search words..." oninput="searchDictionary()">
-                    <select id="filterCategory" onchange="filterDictionary()"></select>
-                </div>
-                <div class="stats" id="stats" style="display:none;"></div>
-                <div id="dictionaryGrid" style="display:none;">
-                    <!-- Words will be added here -->
-                </div>
-                <button id="toggleImportExportBtn" onclick="toggleImportExport()" style="margin-top:15px;">Show Import/Export</button>
-                <div id="importExportSection" style="display:none; margin-top:1rem;">
-                    <div id="importExportPalette" style="margin-bottom:1rem;">
-                        <strong>How to add words:</strong>
-                        <div style="background:#f3f6fa;padding:0.5em 1em;border-radius:6px;margin:0.5em 0;">
-                            <span style="display:inline-block;width:120px;"><b>Word</b></span>
-                            <span style="display:inline-block;width:120px;"><b>Translation</b></span>
-                            <span style="display:inline-block;width:120px;"><b>Category</b></span>
-                        </div>
-                        <span style="color:#888;">Example: <b>apple,</b>  <b>яблуко,</b> <b>general</b></span>
-                    </div>
-                    <h3>Import/Export Dictionary (Text Format)</h3>
-                    <textarea id="dictionaryTextArea" rows="8" style="width:100%;" placeholder="word,translation,category"></textarea>
-                    <div style="margin-top:10px;">
-                        <button onclick="importDictionaryFromText()">Import from Text</button>
-                        <button onclick="exportDictionaryToText()">Export to Text</button>
-                    </div>
-                    <div id="importMessage"></div>
-                </div>
-            </div>
-
-
-
-                <h2>Learning Center</h2>
-                <div class="learning-tabs">
-                    <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
-                    <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
-
-                    <button class="tab-btn" onclick="switchTab('typing')">Typing</button>
-                    <button class="tab-btn" onclick="switchTab('hangman')">Build House</button>
-                    <button class="tab-btn" onclick="switchTab('wordSearch')">Word Search</button>
-
-                </div>
-                <div id="flashcards" class="game-container active compact">
-                    <div class="controls">
-                        <select id="flashcardCategory"></select>
-                        <button onclick="startFlashcards()">Start Practice</button>
-                    </div>
-                    <div class="flashcard" onclick="flipCard()">
-                        <div class="flashcard-inner">
-                            <div class="flashcard-front">
-                                <p id="cardWord"></p>
-                            </div>
-                            <div class="flashcard-back">
-                                <p id="cardTranslation"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flashcard-controls">
-                        <button onclick="previousCard()">Previous</button>
-                        <span id="cardProgress">0/0</span>
-                        <button onclick="nextCard()">Next</button>
-                    </div>
-                </div>
-                <div id="quiz" class="game-container">
-                    <div class="controls">
-                        <select id="quizCategory"></select>
-                        <input type="number" id="quizWordCount" placeholder="Number of Questions" min="1" max="20" value="10">
-                        <button onclick="startQuiz()">Start Quiz</button>
-                    </div>
-                    <div id="quizContent"></div>
-                    <div id="quizResults"></div>
-                </div>
-
-                <div id="typing" class="game-container">
-                    <div class="controls">
-                        <select id="typingCategory"></select>
-                        <button onclick="startTypingGame()">Start Typing Game</button>
-                    </div>
-                    <div id="typingGame">
-                        <div id="wordToType"></div>
-                        <input type="text" id="typingInput" placeholder="Type the word here...">
-                        <div id="typingStats"></div>
-                    </div>
-                </div>
-                <div id="hangman" class="game-container">
-                    <div class="controls">
-                        <select id="hangmanCategory"></select>
-                        <button onclick="startHangman()">Start Build House</button>
-                    <div id="hangmanGame">
-                        <canvas id="hangmanCanvas" width="200" height="150"></canvas>
-                        <div id="hangmanWord"></div>
-                        <div id="hangmanLetters"></div>
-                    </div>
-                </div>
-                <div id="wordSearch" class="game-container">
-                    <div class="controls">
-                        <select id="wordSearchCategory"></select>
-                        <input type="number" id="wordSearchCount" min="3" max="10" value="4" placeholder="Number of Words">
-                        <button id="wordSearchBtn" onclick="startWordSearch()">Word Search</button>
-                    </div>
-                    <div id="wordSearchGrid"></div>
-                    <div id="wordSearchWords"></div>
-                </div>
-
+      <div class="manage-categories-block">
+        <div class="add-category-row">
+          <input type="text" id="addCategoryInput" placeholder="Add new category">
+          <button type="button" id="addCategoryBtn">Add</button>
+          <button id="toggleManageCategories">Hide Categories</button>
         </div>
+        <div class="manage-categories-content">
+          <div id="categoryFolders" class="category-folders"></div>
+        </div>
+      </div>
     </div>
-    <script src="scripts/theme.js"></script>
-    <script src="scripts/categories.js"></script>
-    <script src="scripts/vocabulary.js"></script>
-    <script src="scripts/flashcards.js"></script>
-    <script src="scripts/quiz.js"></script>
-    <script src="scripts/memory.js"></script>
-    <script src="scripts/typing.js"></script>
-    <script src="scripts/hangman.js"></script>
-    <script src="scripts/wordsearch.js"></script>
-    <script src="scripts/main.js"></script>
-    <script src="scripts/irregularverbs.js"></script>
-    <script src="scripts/exportImport.js"></script>
-<script>
 
-document.addEventListener('DOMContentLoaded', function () {
-  // --- Populate categories ---
-  function populateCategorySelect() {
-    const categories = JSON.parse(localStorage.getItem('categories') || '["general"]');
-    const selects = [
-      'category',
-      'flashcardCategory',
-      'quizCategory',
-      'typingCategory',
-      'hangmanCategory',
-      'wordSearchCategory',
-      'filterCategory'
-    ];
+    <div class="section">
+      <h2>Your Dictionary</h2>
+      <button id="toggleDictionaryBtn" onclick="toggleDictionary()" style="margin-bottom:10px;">Show Dictionary</button>
+      <div class="controls">
+        <input type="text" id="searchWord" placeholder="Search words..." oninput="searchDictionary()">
+        <select id="filterCategory" onchange="filterDictionary()"></select>
+      </div>
+      <div class="stats" id="stats" style="display:none;"></div>
+      <div id="dictionaryGrid" style="display:none;">
+        <!-- Words will be added here -->
+      </div>
+      <button id="toggleImportExportBtn" onclick="toggleImportExport()" style="margin-top:15px;">Show Import/Export</button>
+      <div id="importExportSection" style="display:none; margin-top:1rem;">
+        <div id="importExportPalette" style="margin-bottom:1rem;">
+          <strong>How to add words:</strong>
+          <div style="background:#f3f6fa;padding:0.5em 1em;border-radius:6px;margin:0.5em 0;">
+            <span style="display:inline-block;width:120px;"><b>Word</b></span>
+            <span style="display:inline-block;width:120px;"><b>Translation</b></span>
+            <span style="display:inline-block;width:120px;"><b>Category</b></span>
+          </div>
+          <span style="color:#888;">Example: <b>apple,</b> <b>яблуко,</b> <b>general</b></span>
+        </div>
+        <h3>Import/Export Dictionary (Text Format)</h3>
+        <textarea id="dictionaryTextArea" rows="8" style="width:100%;" placeholder="word,translation,category"></textarea>
+        <div style="margin-top:10px;">
+          <button onclick="importDictionaryFromText()">Import from Text</button>
+          <button onclick="exportDictionaryToText()">Export to Text</button>
+        </div>
+        <div id="importMessage"></div>
+      </div>
+    </div>
 
-    selects.forEach(id => {
-      const select = document.getElementById(id);
-      if (select) {
-        select.innerHTML = '';
-        categories.forEach(cat => {
-          const option = document.createElement('option');
-          option.value = cat;
-          option.textContent = cat;
-          select.appendChild(option);
+    <h2>Learning Center</h2>
+    <div class="learning-tabs">
+      <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
+      <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+      <button class="tab-btn" onclick="switchTab('typing')">Typing</button>
+      <button class="tab-btn" onclick="switchTab('hangman')">Build House</button>
+    </div>
+
+    <div id="flashcards" class="game-container active compact">
+      <div class="controls">
+        <select id="flashcardCategory"></select>
+        <button onclick="startFlashcards()">Start Practice</button>
+      </div>
+      <div class="flashcard" onclick="flipCard()">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <p id="cardWord"></p>
+          </div>
+          <div class="flashcard-back">
+            <p id="cardTranslation"></p>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-controls">
+        <button onclick="previousCard()">Previous</button>
+        <span id="cardProgress">0/0</span>
+        <button onclick="nextCard()">Next</button>
+      </div>
+    </div>
+
+    <div id="quiz" class="game-container">
+      <div class="controls">
+        <select id="quizCategory"></select>
+        <input type="number" id="quizWordCount" placeholder="Number of Questions" min="1" max="20" value="10">
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+      <div id="quizContent"></div>
+      <div id="quizResults"></div>
+    </div>
+
+    <div id="typing" class="game-container">
+      <div class="controls">
+        <select id="typingCategory"></select>
+        <button onclick="startTypingGame()">Start Typing Game</button>
+      </div>
+      <div id="typingGame">
+        <div id="wordToType"></div>
+        <input type="text" id="typingInput" placeholder="Type the word here...">
+        <div id="typingStats"></div>
+      </div>
+    </div>
+
+    <div id="hangman" class="game-container">
+      <div class="controls">
+        <select id="hangmanCategory"></select>
+        <button onclick="startHangman()">Start Build House</button>
+        <div id="hangmanGame">
+          <canvas id="hangmanCanvas" width="200" height="150"></canvas>
+          <div id="hangmanWord"></div>
+          <div id="hangmanLetters"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wordSearch" class="game-container">
+      <div class="controls">
+        <select id="wordSearchCategory"></select>
+        <input type="number" id="wordSearchCount" min="3" max="10" value="4" placeholder="Number of Words">
+        <button id="wordSearchBtn" onclick="startWordSearch()">Word Search</button>
+      </div>
+      <div id="wordSearchGrid"></div>
+      <div id="wordSearchWords"></div>
+    </div>
+  </div>
+
+  <script src="scripts/theme.js"></script>
+  <script src="scripts/categories.js"></script>
+  <script src="scripts/vocabulary.js"></script>
+  <script src="scripts/flashcards.js"></script>
+  <script src="scripts/quiz.js"></script>
+  <script src="scripts/memory.js"></script>
+  <script src="scripts/typing.js"></script>
+  <script src="scripts/hangman.js"></script>
+  <script src="scripts/wordsearch.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/irregularverbs.js"></script>
+  <script src="scripts/exportImport.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // --- Populate categories ---
+      function populateCategorySelect() {
+        const categories = JSON.parse(localStorage.getItem('categories') || '["general"]');
+        const selects = [
+          'category', 'flashcardCategory', 'quizCategory', 'typingCategory',
+          'hangmanCategory', 'wordSearchCategory', 'filterCategory'
+        ];
+        selects.forEach(id => {
+          const select = document.getElementById(id);
+          if (select) {
+            select.innerHTML = '';
+            categories.forEach(cat => {
+              const option = document.createElement('option');
+              option.value = cat;
+              option.textContent = cat;
+              select.appendChild(option);
+            });
+          }
         });
       }
-    });
-  }
-  populateCategorySelect();
+      populateCategorySelect();
 
-  // --- Toggle category manager ---
-  const btn = document.getElementById('toggleManageCategories');
-  const content = document.querySelector('.manage-categories-content');
-  if (btn && content) {
-    btn.addEventListener('click', function () {
-      if (content.style.display === 'none') {
-        content.style.display = '';
-        btn.textContent = 'Hide Categories';
+      // --- Toggle category manager ---
+      const btn = document.getElementById('toggleManageCategories');
+      const content = document.querySelector('.manage-categories-content');
+      if (btn && content) {
+        btn.addEventListener('click', function () {
+          if (content.style.display === 'none') {
+            content.style.display = '';
+            btn.textContent = 'Hide Categories';
+          } else {
+            content.style.display = 'none';
+            btn.textContent = 'Show Categories';
+          }
+        });
+      }
+
+      // --- Text-to-Speech Function ---
+      function speakText(text, lang = 'uk-UA') {
+        if (!text) return;
+
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        // Create speech utterance
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Try to find a voice for the specified language
+        const voices = speechSynthesis.getVoices();
+        const targetVoice = voices.find(voice => voice.lang.startsWith(lang)) ||
+                            voices.find(voice => voice.lang.includes(lang.split('-')[0])) ||
+                            null;
+
+        if (targetVoice) {
+          utterance.voice = targetVoice;
+        }
+
+        utterance.lang = lang;
+        utterance.rate = 0.9; // Slightly slower for clarity
+        utterance.pitch = 1;
+
+        // Speak it
+        window.speechSynthesis.speak(utterance);
+      }
+
+      // Ensure voices are loaded before speaking
+      let voicesLoaded = false;
+
+      const loadVoices = () => {
+        voicesLoaded = true;
+      };
+
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
       } else {
-        content.style.display = 'none';
-        btn.textContent = 'Show Categories';
+        // Fallback: wait a bit for voices to load
+        setTimeout(() => { voicesLoaded = true; }, 1000);
       }
+
+      // --- Auto-translate EN -> UK with robust fallbacks ---
+      const wordInput = document.getElementById('word');
+      const translationInput = document.getElementById('translation');
+      const offlineDict = {
+        dog: 'собака', cat: 'кіт', apple: 'яблуко', hello: 'привіт',
+        book: 'книга', water: 'вода', house: 'будинок'
+      };
+      let activeController = null;
+
+      async function translateEnUk(text) {
+        try {
+          if (activeController) activeController.abort();
+          activeController = new AbortController();
+          const res = await fetch('https://libretranslate.de/translate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              q: text,
+              source: 'en',
+              target: 'uk',
+              format: 'text'
+            }),
+            signal: activeController.signal
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.translatedText) return data.translatedText;
+          }
+        } catch (_) { }
+
+        const offline = offlineDict[text.toLowerCase()];
+        if (offline) return offline;
+
+        try {
+          if (activeController) activeController.abort();
+          activeController = new AbortController();
+          const res2 = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|uk`, {
+            signal: activeController.signal
+          });
+          if (res2.ok) {
+            const data2 = await res2.json();
+            const t = data2?.responseData?.translatedText;
+            if (t) return t;
+          }
+        } catch (_) { }
+
+        return '';
+      }
+
+      if (wordInput && translationInput) {
+        wordInput.addEventListener('input', async function () {
+          const text = this.value.trim();
+          translationInput.value = '';
+          if (!text) {
+            translationInput.placeholder = 'Enter translation';
+            return;
+          }
+          const startedWith = this.value;
+          translationInput.placeholder = 'Translating...';
+          const translated = await translateEnUk(text);
+          if (this.value !== startedWith) return; // User kept typing
+
+          translationInput.value = translated || '';
+          translationInput.placeholder = translated ? '' : 'Could not translate';
+
+          // 👂 SPEAK THE TRANSLATED TEXT AFTER IT'S FILLED
+          if (translated) {
+            if (voicesLoaded) {
+              speakText(translated, 'uk-UA');
+            } else {
+              setTimeout(() => {
+                if (voicesLoaded) {
+                  speakText(translated, 'uk-UA');
+                }
+              }, 500);
+            }
+          }
+        });
+      }
+
+      // 👂 NEW: Add click handler for English word speaker button
+      const speakWordBtn = document.getElementById('speakWordBtn');
+      if (speakWordBtn && wordInput) {
+        speakWordBtn.addEventListener('click', function() {
+          const word = wordInput.value.trim();
+          if (word) {
+            speakText(word, 'en-US'); // Speak in American English
+          }
+        });
+
+        // Optional: Disable button when input is empty
+        wordInput.addEventListener('input', function() {
+          const isEmpty = !this.value.trim();
+          speakWordBtn.disabled = isEmpty;
+          speakWordBtn.style.opacity = isEmpty ? 0.5 : 1;
+          speakWordBtn.style.cursor = isEmpty ? 'not-allowed' : 'pointer';
+        });
+
+        // Initialize button state
+        const initialEmpty = !wordInput.value.trim();
+        speakWordBtn.disabled = initialEmpty;
+        speakWordBtn.style.opacity = initialEmpty ? 0.5 : 1;
+        speakWordBtn.style.cursor = initialEmpty ? 'not-allowed' : 'pointer';
+      }
+
     });
-  }
-
-  // --- Auto-translate EN -> UK with robust fallbacks ---
-  const wordInput = document.getElementById('word');
-  const translationInput = document.getElementById('translation');
-
-  const offlineDict = {
-    dog: 'собака',
-    cat: 'кіт',
-    apple: 'яблуко',
-    hello: 'привіт',
-    book: 'книга',
-    water: 'вода',
-    house: 'будинок'
-  };
-
-  let activeController = null;
-
-  async function translateEnUk(text) {
-    try {
-      if (activeController) activeController.abort();
-      activeController = new AbortController();
-
-      const res = await fetch('https://libretranslate.de/translate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({ q: text, source: 'en', target: 'uk', format: 'text' }),
-        signal: activeController.signal
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.translatedText) return data.translatedText;
-      }
-    } catch (_) { }
-
-    const offline = offlineDict[text.toLowerCase()];
-    if (offline) return offline;
-
-    try {
-      if (activeController) activeController.abort();
-      activeController = new AbortController();
-
-      const res2 = await fetch(
-        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|uk`,
-        { signal: activeController.signal }
-      );
-      if (res2.ok) {
-        const data2 = await res2.json();
-        const t = data2?.responseData?.translatedText;
-        if (t) return t;
-      }
-    } catch (_) { }
-
-    return '';
-  }
-
-  if (wordInput && translationInput) {
-    wordInput.addEventListener('input', async function () {
-      const text = this.value.trim();
-      translationInput.value = '';
-      if (!text) {
-        translationInput.placeholder = 'Enter translation';
-        return;
-      }
-
-      const startedWith = this.value;
-      translationInput.placeholder = 'Translating...';
-
-      const translated = await translateEnUk(text);
-      if (this.value !== startedWith) return;
-
-      translationInput.value = translated || '';
-      translationInput.placeholder = translated ? '' : 'Could not translate';
-    });
-  }
-});
-</script>
-
-
+  </script>
 </body>
 </html>

@@ -71,32 +71,44 @@ window.updateStats = function() {
 };
 
 window.displayDictionary = function(wordsToDisplay = window.vocabulary) {
-    const grid = document.getElementById('dictionaryGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    grid.style.display = 'flex';
-    grid.style.flexWrap = 'wrap';
-    grid.style.gap = '16px';
-    wordsToDisplay.forEach((wordObj) => {
-        const row = document.createElement('div');
-        row.className = 'dictionary-row';
-        row.style.display = 'flex';
-        row.style.alignItems = 'center';
-        row.style.border = '1px solid #e2e8f0';
-        row.style.borderRadius = '8px';
-        row.style.padding = '8px 16px';
-        row.style.marginBottom = '0';
-        row.style.background = '#fff';
-        row.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
-        row.innerHTML = `
-          <span>
-            <b>${wordObj.word}</b> — ${wordObj.translation} <span style="color:#667eea;">[${wordObj.category}]</span>
-          </span>
-          <button class="edit-word-btn" style="margin-left:10px;" onclick="editWordById(${wordObj.id})">Edit</button>
-          <button class="delete-btn" style="margin-left:5px;" onclick="deleteWord(${wordObj.id})">Delete</button>
-        `;
-        grid.appendChild(row);
+const grid = document.getElementById('dictionaryGrid');
+if (!grid) return;
+grid.innerHTML = '';
+grid.style.display = 'flex';
+grid.style.flexWrap = 'wrap';
+grid.style.gap = '16px';
+
+wordsToDisplay.forEach((wordObj) => {
+    const row = document.createElement('div');
+    row.className = 'dictionary-row';
+    row.style.display = 'flex';
+    row.style.alignItems = 'center';
+    row.style.border = '1px solid #e2e8f0';
+    row.style.borderRadius = '8px';
+    row.style.padding = '8px 16px';
+    row.style.marginBottom = '0';
+    row.style.background = '#fff';
+    row.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
+
+    row.innerHTML = `
+      <span>
+        <b>${wordObj.word}</b> — ${wordObj.translation} <span style="color:#667eea;">[${wordObj.category}]</span>
+      </span>
+      <button class="edit-word-btn" style="margin-left:10px;" onclick="editWordById(${wordObj.id})">Edit</button>
+      <button class="delete-btn" style="margin-left:5px;" onclick="deleteWord(${wordObj.id})">Delete</button>
+      <button class="voice-btn" title="Hear pronunciation">🔊</button>
+    `;
+
+    // ✅ Fix here: use wordObj instead of entry
+    row.querySelector(".voice-btn").addEventListener("click", () => {
+        speakWord(wordObj.word, "en-US");  // Speak the English word
+        // Or also speak the translation:
+        // speakWord(wordObj.translation, "uk-UA");
     });
+
+    grid.appendChild(row);
+});
+
 };
 
 // Edit by id (since vocabulary uses id, not index)

@@ -181,3 +181,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+function speakWord(text, lang = "en-US") {
+  if (!text) return;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  speechSynthesis.speak(utterance);
+}
+
+function speakWord(text, lang = "en-US") {
+  if (!text) return;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  speechSynthesis.speak(utterance);
+}
