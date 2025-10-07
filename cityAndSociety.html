@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Vocabulary Games — Government & Society</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; background: #f5f5f5; margin:0; padding:0; }
+  h1 { background: #3b82f6; color: white; margin:0; padding:16px; }
+  .menu { margin: 12px; }
+  .menu button { background:#2563eb; color:white; border:none; margin:6px; padding:10px 14px; border-radius:10px; cursor:pointer; font-size:15px; }
+  .menu button:hover { background:#1e40af; }
+  .controls { margin:10px; }
+  select { padding:6px 10px; font-size:15px; }
+  .game { display:none; margin-top:18px; }
+  .visible { display:block; }
+
+  /* Flashcards */
+  .flashcard-container { perspective:1000px; width:320px; height:200px; margin: 16px auto; }
+  .card { width:100%; height:100%; transform-style:preserve-3d; transition:transform 0.6s; cursor:pointer; position:relative; }
+  .card.flip { transform:rotateY(180deg); }
+  .card-face { position:absolute; width:100%; height:100%; backface-visibility:hidden; display:flex; align-items:center; justify-content:center; font-size:24px; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.15); }
+  .card-front { background: linear-gradient(135deg,#ffffff,#eef2ff); }
+  .card-back { transform:rotateY(180deg); background: linear-gradient(135deg,#bfdbfe,#e0f2fe); }
+
+  /* Matching */
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:86%; max-width:720px; margin:16px auto; }
+  .tile { background:white; border-radius:8px; box-shadow:0 1px 6px rgba(0,0,0,0.12); padding:12px; cursor:pointer; user-select:none; min-height:48px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .tile.matched { background:#d1fae5; color:#065f46; font-weight:600; }
+
+  /* Quiz */
+  .quiz-question { font-size:20px; margin:12px; }
+  .quiz-options button { display:block; margin:8px auto; width:62%; padding:10px; border:none; border-radius:8px; background:#3b82f6; color:white; cursor:pointer; font-size:15px; }
+  .quiz-options button:hover { background:#1e40af; }
+
+  /* Typing */
+  #typing-input { padding:10px; font-size:16px; width:60%; max-width:360px; }
+  #typing-feedback { margin-top:8px; font-weight:600; min-height:22px; }
+  .small-btn { background:#64748b; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; margin:6px; }
+  .small-btn:hover { background:#475569; }
+  .controls-row { display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+
+<h1>Vocabulary Games — Government & Society</h1>
+
+<div class="menu">
+  <button onclick="showGame('flashcards')">🧠 Flashcards</button>
+  <button onclick="showGame('match')">🧩 Matching</button>
+  <button onclick="showGame('quiz')">🎯 Quiz</button>
+  <button onclick="showGame('typing')">✍️ Typing</button>
+</div>
+
+<div class="controls">
+  <div class="controls-row">
+    <label>Use this many words: </label>
+    <select id="wordCount" onchange="resetAll()">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="20" selected>20</option>
+    </select>
+    <button class="small-btn" onclick="resetAll()">Apply</button>
+  </div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="flashcards" class="game visible">
+  <div class="flashcard-container">
+    <div class="card" id="flashcard" title="Click to flip">
+      <div class="card-face card-front" id="flash-front"></div>
+      <div class="card-face card-back" id="flash-back"></div>
+    </div>
+  </div>
+  <div class="controls-row">
+    <button class="small-btn" onclick="prevCard()">Previous</button>
+    <button class="small-btn" onclick="shuffleFlashcards()">🔀 Shuffle Flashcards</button>
+    <button class="small-btn" onclick="nextCard()">Next</button>
+  </div>
+  <div style="margin-top:10px;">
+    <span id="flash-progress"></span>
+  </div>
+</div>
+
+<!-- MATCHING GAME -->
+<div id="match" class="game">
+  <div id="match-grid" class="grid"></div>
+  <p id="match-status"></p>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="game">
+  <div class="quiz-question" id="quiz-question"></div>
+  <div class="quiz-options" id="quiz-options"></div>
+  <p id="quiz-score"></p>
+</div>
+
+<!-- TYPING -->
+<div id="typing" class="game">
+  <h3 id="typing-word"></h3>
+  <input type="text" id="typing-input" placeholder="Type the English word and press Enter">
+  <div class="controls-row" style="justify-content:center; margin-top:8px;">
+    <button class="small-btn" onclick="revealTypingAnswer()">Show answer</button>
+    <button class="small-btn" onclick="skipTypingWord()">Skip</button>
+  </div>
+  <div id="typing-feedback"></div>
+  <p id="typing-score"></p>
+</div>
+
+<script>
+/* -------------------------
+   Words (full list)
+   ------------------------- */
+const fullWords = [
+  {en:'government', uk:'уряд'},
+  {en:'country', uk:'країна'},
+  {en:'nation', uk:'нація'},
+  {en:'capital', uk:'столиця'},
+  {en:'citizen', uk:'громадянин'},
+  {en:'population', uk:'населення'},
+  {en:'village', uk:'село'},
+  {en:'town', uk:'місто (маленьке)'},
+  {en:'city', uk:'місто (велике)'},
+  {en:'building', uk:'будівля'},
+  {en:'bridge', uk:'міст'},
+  {en:'market', uk:'ринок'},
+  {en:'square', uk:'площа'},
+  {en:'museum', uk:'музей'},
+  {en:'library', uk:'бібліотека'},
+  {en:'law', uk:'закон'},
+  {en:'police', uk:'поліція'},
+  {en:'prison', uk:'в’язниця'},
+  {en:'politics', uk:'політика'},
+  {en:'president', uk:'президент'},
+];
+
+/* -------------------------
+   Helpers
+   ------------------------- */
+function shuffle(arr){
+  // Fisher-Yates shuffle for reliability
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* -------------------------
+   Active subset & per-game arrays
+   ------------------------- */
+let words = [...fullWords];      // active subset used by games
+let flashWords = [];            // separate order for flashcards (so shuffle flashcards only)
+function setActiveSubset(n){
+  // choose random subset of fullWords of size n
+  const shuffledFull = shuffle(fullWords);
+  words = shuffledFull.slice(0, n);
+  // initialize flashcards from that subset
+  flashWords = shuffle(words.slice());
+}
+
+/* -------------------------
+   UI switching
+   ------------------------- */
+function showGame(id){
+  document.querySelectorAll('.game').forEach(g => g.classList.remove('visible'));
+  document.getElementById(id).classList.add('visible');
+}
+
+/* -------------------------
+   RESET / INIT
+   ------------------------- */
+function resetAll(){
+  const n = parseInt(document.getElementById('wordCount').value, 10) || 20;
+  setActiveSubset(n);
+  startFlashcards();
+  startMatchGame();
+  startQuiz();
+  startTyping();
+}
+
+/* =========================
+   FLASHCARDS (uses flashWords)
+   ========================= */
+const cardEl = document.getElementById('flashcard');
+const frontEl = document.getElementById('flash-front');
+const backEl = document.getElementById('flash-back');
+const flashProgressEl = document.getElementById('flash-progress');
+
+let flashIndex = 0;
+
+cardEl.addEventListener('click', () => {
+  cardEl.classList.toggle('flip');
+});
+
+function renderFlashcard(){
+  if (!flashWords || flashWords.length === 0) {
+    frontEl.textContent = '';
+    backEl.textContent = '';
+    flashProgressEl.textContent = '';
+    return;
+  }
+  const w = flashWords[flashIndex];
+  frontEl.textContent = w.en;
+  backEl.textContent = w.uk;
+  flashProgressEl.textContent = `Card ${flashIndex + 1} of ${flashWords.length}`;
+  // ensure not flipped when rendering new content
+  cardEl.classList.remove('flip');
+}
+
+function nextCard(){
+  if (!flashWords || flashWords.length === 0) return;
+  flashIndex = (flashIndex + 1) % flashWords.length;
+  renderFlashcard();
+}
+function prevCard(){
+  if (!flashWords || flashWords.length === 0) return;
+  flashIndex = (flashIndex - 1 + flashWords.length) % flashWords.length;
+  renderFlashcard();
+}
+function shuffleFlashcards(){
+  if (!flashWords) return;
+  flashWords = shuffle(flashWords);
+  flashIndex = 0;
+  renderFlashcard();
+}
+function startFlashcards(){
+  // create a fresh flashWords array from words (keeps independent order)
+  flashWords = shuffle(words.slice());
+  flashIndex = 0;
+  renderFlashcard();
+}
+
+/* =========================
+   MATCHING GAME
+   ========================= */
+const matchGrid = document.getElementById('match-grid');
+let matchFirst = null;
+let matchPairsFound = 0;
+
+function startMatchGame(){
+  matchGrid.innerHTML = '';
+  matchFirst = null;
+  matchPairsFound = 0;
+  if (!words || words.length === 0) return;
+  // build tile list: each pair = en and uk
+  const tiles = [];
+  words.forEach(w => {
+    tiles.push({text: w.en, pair: w.uk});
+    tiles.push({text: w.uk, pair: w.en});
+  });
+  const shuffledTiles = shuffle(tiles);
+  shuffledTiles.forEach(item => {
+    const d = document.createElement('div');
+    d.className = 'tile';
+    d.textContent = item.text;
+    d.onclick = () => selectTile(d, item);
+    matchGrid.appendChild(d);
+  });
+  document.getElementById('match-status').textContent = '';
+}
+
+function selectTile(tileEl, item){
+  if (tileEl.classList.contains('matched')) return;
+  // reveal tile visually
+  tileEl.style.background = '#fde68a';
+  tileEl.style.transition = 'background 0.2s';
+  if (!matchFirst) {
+    matchFirst = {tileEl, item};
+    setTimeout(()=>{ tileEl.style.background = ''; }, 400);
+    return;
+  }
+  // second tile selected
+  const first = matchFirst;
+  if (first.item.pair === item.text || first.item.text === item.pair) {
+    first.tileEl.classList.add('matched');
+    tileEl.classList.add('matched');
+    // keep a slight visual to confirm match
+    first.tileEl.style.background = '';
+    tileEl.style.background = '';
+    matchPairsFound++;
+    if (matchPairsFound === words.length) {
+      document.getElementById('match-status').textContent = '🎉 All matched!';
+    }
+  } else {
+    // mismatch: flash both and hide back
+    first.tileEl.style.background = '#fecaca';
+    tileEl.style.background = '#fecaca';
+    setTimeout(() => {
+      first.tileEl.style.background = '';
+      tileEl.style.background = '';
+    }, 600);
+  }
+  matchFirst = null;
+}
+
+/* =========================
+   QUIZ
+   ========================= */
+let quizIndex = 0;
+let quizScore = 0;
+
+function startQuiz(){
+  quizIndex = 0;
+  quizScore = 0;
+  document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
+  nextQuizQuestion();
+}
+
+function nextQuizQuestion(){
+  const qEl = document.getElementById('quiz-question');
+  const oEl = document.getElementById('quiz-options');
+
+  if (!words || words.length === 0) {
+    qEl.textContent = '';
+    oEl.innerHTML = '';
+    return;
+  }
+
+  if (quizIndex >= words.length) {
+    qEl.textContent = `Done! Score: ${quizScore}/${words.length}`;
+    oEl.innerHTML = '';
+    return;
+  }
+
+  const w = words[quizIndex];
+  qEl.textContent = `Translate: ${w.uk}`;
+  // build options (correct + random others from fullWords)
+  const options = [w.en];
+  while (options.length < 4) {
+    const candidate = fullWords[Math.floor(Math.random() * fullWords.length)].en;
+    if (!options.includes(candidate)) options.push(candidate);
+  }
+  const shuffledOptions = shuffle(options);
+  oEl.innerHTML = '';
+  shuffledOptions.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.onclick = () => {
+      if (opt === w.en) quizScore++;
+      quizIndex++;
+      document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
+      nextQuizQuestion();
+    };
+    oEl.appendChild(btn);
+  });
+  document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
+}
+
+/* =========================
+   TYPING
+   ========================= */
+const typingWordEl = document.getElementById('typing-word');
+const typingInput = document.getElementById('typing-input');
+const typingScoreEl = document.getElementById('typing-score');
+const typingFeedbackEl = document.getElementById('typing-feedback');
+
+let typingScore = 0;
+let typingHandlerAttached = false;
+
+function initTypingHandler(){
+  if (typingHandlerAttached) return;
+  typingInput.addEventListener('keyup', typingKeyHandler);
+  typingHandlerAttached = true;
+}
+
+function typingKeyHandler(e){
+  if (e.key !== 'Enter') return;
+  handleTypingSubmit();
+}
+
+function startTyping(){
+  typingScore = 0;
+  typingScoreEl.textContent = `Score: ${typingScore}`;
+  nextTypingWord();
+  typingInput.value = '';
+  typingInput.disabled = false;
+  clearTypingFeedback();
+  initTypingHandler();
+  typingInput.focus();
+}
+
+function nextTypingWord(){
+  if (!words || words.length === 0) {
+    typingWordEl.textContent = '';
+    typingWordEl.dataset.answer = '';
+    return;
+  }
+  const w = words[Math.floor(Math.random() * words.length)];
+  typingWordEl.textContent = `Translate: ${w.uk}`;
+  typingWordEl.dataset.answer = w.en;
+  clearTypingFeedback();
+}
+
+function showTypingFeedback(msg){
+  typingFeedbackEl.textContent = msg;
+}
+
+function clearTypingFeedback(){
+  typingFeedbackEl.textContent = '';
+}
+
+function handleTypingSubmit(){
+  if (!typingWordEl.dataset.answer) return;
+  const user = typingInput.value.trim().toLowerCase();
+  const correct = typingWordEl.dataset.answer.trim().toLowerCase();
+  // disable input briefly while showing answer
+  typingInput.disabled = true;
+  if (user.length > 0 && user === correct) {
+    typingScore++;
+    showTypingFeedback('Correct! ✅ — ' + typingWordEl.dataset.answer);
+  } else {
+    showTypingFeedback('Wrong — correct: ' + typingWordEl.dataset.answer);
+  }
+  typingScoreEl.textContent = `Score: ${typingScore}`;
+  // after delay go to next word and re-enable input
+  setTimeout(() => {
+    typingInput.disabled = false;
+    typingInput.value = '';
+    nextTypingWord();
+    typingInput.focus();
+  }, 1400);
+}
+
+function revealTypingAnswer(){
+  if (!typingWordEl.dataset.answer) return;
+  showTypingFeedback('Answer: ' + typingWordEl.dataset.answer);
+  // do not change score; allow user to continue
+  setTimeout(() => { clearTypingFeedback(); typingInput.focus(); }, 1300);
+}
+
+function skipTypingWord(){
+  // skip without changing score, show correct briefly
+  if (!typingWordEl.dataset.answer) return;
+  showTypingFeedback('Skipped — answer: ' + typingWordEl.dataset.answer);
+  setTimeout(() => {
+    clearTypingFeedback();
+    typingInput.value = '';
+    nextTypingWord();
+    typingInput.focus();
+  }, 900);
+}
+
+/* =========================
+   Initialize on load
+   ========================= */
+resetAll(); // sets subset and starts all games
+
+</script>
+</body>
+</html>
