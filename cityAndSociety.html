@@ -1,115 +1,234 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Vocabulary Games — Government & Society</title>
 <style>
-  body { font-family: Arial, sans-serif; text-align: center; background: #f5f5f5; margin:0; padding:0; }
-  h1 { background: #3b82f6; color: white; margin:0; padding:16px; }
-  .menu { margin: 12px; }
-  .menu button { background:#2563eb; color:white; border:none; margin:6px; padding:10px 14px; border-radius:10px; cursor:pointer; font-size:15px; }
-  .menu button:hover { background:#1e40af; }
-  .controls { margin:10px; }
-  select { padding:6px 10px; font-size:15px; }
-  .game { display:none; margin-top:18px; }
-  .visible { display:block; }
+  :root{
+    --primary:#2563eb;
+    --accent:#16a34a;
+    --danger:#dc2626;
+    --bg1: #f0f9ff;
+    --bg2: #fff7ed;
+    --card:#ffffff;
+  }
+  body{
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    margin:0; padding:0;
+    background: linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:#0f172a;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{
+    background:var(--primary); color:white; padding:14px 16px; box-shadow:0 4px 18px rgba(2,6,23,0.15);
+  }
+  header h1{ margin:0; font-size:20px; }
+  .container{ max-width:1000px; margin:18px auto; padding:0 16px; }
+  .topbar{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:14px 0; }
+  .tabs{display:flex; gap:8px; flex-wrap:wrap;}
+  .tab-btn{
+    background:var(--primary); color:white; border:none; padding:8px 12px; border-radius:10px; cursor:pointer;
+    box-shadow:0 2px 8px rgba(37,99,235,0.15);
+  }
+  .tab-btn.secondary{ background:#6b7280; }
+  .controls{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+  select, input[type=number]{ padding:8px 10px; border-radius:8px; border:1px solid #cbd5e1; }
+  button.small{ padding:8px 10px; border-radius:8px; border:none; cursor:pointer; background:#64748b; color:white; }
+  main{ margin-top:10px; }
+  .game{ display:none; padding:18px; background:var(--card); border-radius:12px; box-shadow:0 6px 20px rgba(2,6,23,0.06); }
+  .visible{ display:block; }
 
-  /* Flashcards */
-  .flashcard-container { perspective:1000px; width:320px; height:200px; margin: 16px auto; }
-  .card { width:100%; height:100%; transform-style:preserve-3d; transition:transform 0.6s; cursor:pointer; position:relative; }
-  .card.flip { transform:rotateY(180deg); }
-  .card-face { position:absolute; width:100%; height:100%; backface-visibility:hidden; display:flex; align-items:center; justify-content:center; font-size:24px; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.15); }
-  .card-front { background: linear-gradient(135deg,#ffffff,#eef2ff); }
-  .card-back { transform:rotateY(180deg); background: linear-gradient(135deg,#bfdbfe,#e0f2fe); }
+  /* FLASHCARD */
+  .flash-wrap{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .flashcard-container{ perspective:1200px; width:360px; height:220px; }
+  .card{ width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.6s; cursor:pointer; }
+  .card.flip{ transform:rotateY(180deg); }
+  .face{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; backface-visibility:hidden; border-radius:12px; font-size:28px; font-weight:600; box-shadow:0 10px 30px rgba(2,6,23,0.08); padding:18px; text-align:center; }
+  .front{ background: linear-gradient(135deg,#ffffff,#eff6ff); }
+  .back{ background: linear-gradient(135deg,#dbeafe,#e0f2fe); transform:rotateY(180deg); }
 
-  /* Matching */
-  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:86%; max-width:720px; margin:16px auto; }
-  .tile { background:white; border-radius:8px; box-shadow:0 1px 6px rgba(0,0,0,0.12); padding:12px; cursor:pointer; user-select:none; min-height:48px; display:flex; align-items:center; justify-content:center; font-size:16px; }
-  .tile.matched { background:#d1fae5; color:#065f46; font-weight:600; }
+  .flash-controls{ display:flex; gap:8px; align-items:center; }
 
-  /* Quiz */
-  .quiz-question { font-size:20px; margin:12px; }
-  .quiz-options button { display:block; margin:8px auto; width:62%; padding:10px; border:none; border-radius:8px; background:#3b82f6; color:white; cursor:pointer; font-size:15px; }
-  .quiz-options button:hover { background:#1e40af; }
+  /* QUIZ */
+  .quiz-q{ font-size:20px; margin-bottom:10px; }
+  .quiz-options{ display:flex; flex-direction:column; gap:10px; align-items:center; }
+  .quiz-options button{ width:60%; padding:10px 12px; border-radius:10px; border:none; background:var(--primary); color:white; cursor:pointer; font-size:16px; }
 
-  /* Typing */
-  #typing-input { padding:10px; font-size:16px; width:60%; max-width:360px; }
-  #typing-feedback { margin-top:8px; font-weight:600; min-height:22px; }
-  .small-btn { background:#64748b; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; margin:6px; }
-  .small-btn:hover { background:#475569; }
-  .controls-row { display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; }
+  /* TYPING */
+  .typing-row{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+  #typing-input{ padding:10px 12px; width:60%; font-size:16px; border-radius:10px; border:1px solid #cbd5e1; }
+
+  /* HANGMAN (Guess the Word) */
+  .hangman-area{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .letters{ display:flex; gap:6px; flex-wrap:wrap; justify-content:center; max-width:720px; }
+  .letter-btn{ padding:8px 10px; border-radius:8px; border:none; background:#e6e9ef; cursor:pointer; min-width:40px; font-weight:600; }
+  .letter-btn.disabled{ opacity:0.45; cursor:default; }
+  .word-display{ font-size:26px; letter-spacing:6px; font-weight:700; }
+
+  /* SCRAMBLE */
+  .scramble-row{ display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .scramble-box{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+
+  /* SPEED */
+  .speed-top{ display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:12px; flex-wrap:wrap;}
+  .timer{ font-size:20px; font-weight:700; padding:6px 12px; border-radius:8px; background:#fff; box-shadow:0 6px 18px rgba(2,6,23,0.06); }
+
+  /* common */
+  .status{ margin-top:10px; font-weight:700; }
+  .score{ font-weight:800; color:var(--accent); }
+  .correct{ background:linear-gradient(135deg,#ecfccb,#bbf7d0); }
+  .wrong{ background:linear-gradient(135deg,#fee2e2,#fecaca); }
+
+  footer{ margin:22px 0; text-align:center; color:#475569; font-size:13px; }
+  /* small screens */
+  @media (max-width:700px){
+    .card{ font-size:20px; }
+    .flashcard-container{ width:300px; height:180px; }
+    .quiz-options button{ width:86%; }
+    #typing-input{ width:86%; }
+  }
+  /* simple fireworks */
+  .firework{ position:fixed; left:50%; top:20%; transform:translateX(-50%); pointer-events:none; z-index:1000; }
+  .burst{ width:8px; height:8px; background:transparent; box-shadow:
+    0 -40px 0 0 #ff7ab6,
+    28px -28px 0 0 #ffb86e,
+    40px 0 0 0 #ffd166,
+    28px 28px 0 0 #7ee7c7,
+    0 40px 0 0 #8bd3ff,
+    -28px 28px 0 0 #d3b7ff,
+    -40px 0 0 0 #ff9a9e,
+    -28px -28px 0 0 #f6f59d;
+    animation: burst 700ms ease-out forwards;}
+  @keyframes burst{ from{ opacity:0; transform:scale(0.2) } 50%{ opacity:1 } to{ opacity:0; transform:scale(1.5) } }
 </style>
 </head>
 <body>
-
-<h1>Vocabulary Games — Government & Society</h1>
-
-<div class="menu">
-  <button onclick="showGame('flashcards')">🧠 Flashcards</button>
-  <button onclick="showGame('match')">🧩 Matching</button>
-  <button onclick="showGame('quiz')">🎯 Quiz</button>
-  <button onclick="showGame('typing')">✍️ Typing</button>
-</div>
-
-<div class="controls">
-  <div class="controls-row">
-    <label>Use this many words: </label>
-    <select id="wordCount" onchange="resetAll()">
-      <option value="5">5</option>
-      <option value="10">10</option>
-      <option value="20" selected>20</option>
-    </select>
-    <button class="small-btn" onclick="resetAll()">Apply</button>
+<header>
+  <div style="display:flex;align-items:center;gap:12px;max-width:1000px;margin:0 auto;">
+    <h1>Vocabulary Games — Government & Society</h1>
   </div>
-</div>
+</header>
 
-<!-- FLASHCARDS -->
-<div id="flashcards" class="game visible">
-  <div class="flashcard-container">
-    <div class="card" id="flashcard" title="Click to flip">
-      <div class="card-face card-front" id="flash-front"></div>
-      <div class="card-face card-back" id="flash-back"></div>
+<div class="container">
+  <div class="topbar">
+    <div class="tabs">
+      <button class="tab-btn" onclick="openGame('flash')">🧠 Флеш-картки</button>
+      <button class="tab-btn" onclick="openGame('quiz')">🎯 Quiz</button>
+      <button class="tab-btn" onclick="openGame('typing')">✍️ Typing</button>
+      <button class="tab-btn" onclick="openGame('hang')">🎰 Guess the Word</button>
+      <button class="tab-btn" onclick="openGame('scramble')">🔡 Scramble</button>
+      <button class="tab-btn" onclick="openGame('speed')">⏱️ Speed Test</button>
+    </div>
+
+    <div class="controls">
+      <label for="wordCount">Слів:</label>
+      <select id="wordCount" onchange="applySettings()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20" selected>20</option>
+      </select>
+      <button class="small" onclick="shuffleAll()">🔀 Перемішати всі</button>
     </div>
   </div>
-  <div class="controls-row">
-    <button class="small-btn" onclick="prevCard()">Previous</button>
-    <button class="small-btn" onclick="shuffleFlashcards()">🔀 Shuffle Flashcards</button>
-    <button class="small-btn" onclick="nextCard()">Next</button>
-  </div>
-  <div style="margin-top:10px;">
-    <span id="flash-progress"></span>
-  </div>
+
+  <main>
+    <!-- FLASHCARDS -->
+    <section id="flash" class="game visible">
+      <div style="display:flex;gap:18px;flex-direction:column;align-items:center;">
+        <div class="flash-wrap">
+          <div class="flashcard-container">
+            <div class="card" id="flashcard" title="Клік — перевернути">
+              <div class="face front" id="flash-front"></div>
+              <div class="face back" id="flash-back"></div>
+            </div>
+          </div>
+          <div class="flash-controls">
+            <button class="tab-btn secondary" onclick="prevFlash()">⬅️ Попередня</button>
+            <button class="tab-btn" onclick="shuffleFlashOnly()">🔀 Перемішати флеш-картки</button>
+            <button class="tab-btn secondary" onclick="nextFlash()">Наступна ➡️</button>
+          </div>
+          <div class="status" id="flash-status"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="game">
+      <div>
+        <div class="quiz-q" id="quiz-q">Питання...</div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="status">Рахунок: <span id="quiz-score" class="score">0</span></div>
+      </div>
+    </section>
+
+    <!-- TYPING -->
+    <section id="typing" class="game">
+      <div class="typing-row">
+        <div id="typing-prompt" style="font-size:18px;font-weight:700;">Перекладіть:</div>
+        <div id="typing-word" style="font-size:20px;font-weight:800;"></div>
+        <input id="typing-input" placeholder="Введіть англійське слово і натисніть Enter">
+        <div id="typing-answer" class="status"></div>
+        <div class="status">Рахунок: <span id="typing-score" class="score">0</span></div>
+      </div>
+    </section>
+
+    <!-- HANGMAN / GUESS THE WORD -->
+    <section id="hang" class="game">
+      <div class="hangman-area">
+        <div id="hang-info" style="font-weight:700;">Вгадай англійське слово за перекладом</div>
+        <div id="hang-uk" style="font-size:20px;font-weight:800;"></div>
+        <div class="word-display" id="hang-display">_ _ _ _</div>
+        <div id="hang-chances" style="font-size:14px;color:#6b7280;"></div>
+        <div class="letters" id="hang-letters"></div>
+        <div class="status" id="hang-status"></div>
+        <div style="margin-top:8px;">
+          <button class="tab-btn" onclick="startHang()">Нова</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCRAMBLE -->
+    <section id="scramble" class="game">
+      <div class="scramble-row">
+        <div id="scramble-uk" style="font-weight:800;font-size:18px;"></div>
+        <div class="scramble-box" id="scramble-box"></div>
+        <input id="scramble-input" placeholder="Введіть зібране слово" />
+        <div>
+          <button class="tab-btn" onclick="checkScramble()">Перевірити</button>
+          <button class="tab-btn secondary" onclick="newScramble()">Нове слово</button>
+        </div>
+        <div class="status" id="scramble-status"></div>
+      </div>
+    </section>
+
+    <!-- SPEED TEST -->
+    <section id="speed" class="game">
+      <div>
+        <div class="speed-top">
+          <div class="timer" id="speed-timer">30s</div>
+          <div class="status">Правильно: <span id="speed-score" class="score">0</span></div>
+          <div><button class="tab-btn" onclick="startSpeed()">Start 30s</button></div>
+        </div>
+        <div id="speed-uk" style="font-weight:800;font-size:18px;"></div>
+        <input id="speed-input" placeholder="Швидко введіть переклад" />
+        <div class="status" id="speed-status"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Працює на одному файлі — просто збережи як <code>index.html</code> і відкрий у браузері.
+  </footer>
 </div>
 
-<!-- MATCHING GAME -->
-<div id="match" class="game">
-  <div id="match-grid" class="grid"></div>
-  <p id="match-status"></p>
-</div>
-
-<!-- QUIZ -->
-<div id="quiz" class="game">
-  <div class="quiz-question" id="quiz-question"></div>
-  <div class="quiz-options" id="quiz-options"></div>
-  <p id="quiz-score"></p>
-</div>
-
-<!-- TYPING -->
-<div id="typing" class="game">
-  <h3 id="typing-word"></h3>
-  <input type="text" id="typing-input" placeholder="Type the English word and press Enter">
-  <div class="controls-row" style="justify-content:center; margin-top:8px;">
-    <button class="small-btn" onclick="revealTypingAnswer()">Show answer</button>
-    <button class="small-btn" onclick="skipTypingWord()">Skip</button>
-  </div>
-  <div id="typing-feedback"></div>
-  <p id="typing-score"></p>
-</div>
+<!-- fireworks -->
+<div id="firework-area" class="firework" style="display:none;"><div class="burst"></div></div>
 
 <script>
 /* -------------------------
-   Words (full list)
+   Words list (20)
    ------------------------- */
 const fullWords = [
   {en:'government', uk:'уряд'},
@@ -135,318 +254,413 @@ const fullWords = [
 ];
 
 /* -------------------------
-   Helpers
+   Utilities
    ------------------------- */
-function shuffle(arr){
-  // Fisher-Yates shuffle for reliability
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+function shuffleArray(a){
+  const arr = a.slice();
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
   }
-  return a;
+  return arr;
+}
+function randItem(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+/* -------------------------
+   Active subset (based on selector)
+   ------------------------- */
+let activeWords = fullWords.slice(); // current subset
+function buildActive(){
+  const n = parseInt(document.getElementById('wordCount').value,10) || 20;
+  activeWords = shuffleArray(fullWords).slice(0,n);
 }
 
 /* -------------------------
-   Active subset & per-game arrays
+   Open game tab
    ------------------------- */
-let words = [...fullWords];      // active subset used by games
-let flashWords = [];            // separate order for flashcards (so shuffle flashcards only)
-function setActiveSubset(n){
-  // choose random subset of fullWords of size n
-  const shuffledFull = shuffle(fullWords);
-  words = shuffledFull.slice(0, n);
-  // initialize flashcards from that subset
-  flashWords = shuffle(words.slice());
-}
-
-/* -------------------------
-   UI switching
-   ------------------------- */
-function showGame(id){
-  document.querySelectorAll('.game').forEach(g => g.classList.remove('visible'));
+function openGame(id){
+  document.querySelectorAll('.game').forEach(s=>s.classList.remove('visible'));
   document.getElementById(id).classList.add('visible');
 }
 
 /* -------------------------
-   RESET / INIT
+   Global controls
    ------------------------- */
-function resetAll(){
-  const n = parseInt(document.getElementById('wordCount').value, 10) || 20;
-  setActiveSubset(n);
-  startFlashcards();
-  startMatchGame();
+function applySettings(){
+  buildActive();
+  initAllGames();
+}
+function shuffleAll(){
+  buildActive();
+  // shuffle internal orders
+  startFlash_init();
   startQuiz();
   startTyping();
+  startHang_init();
+  newScramble();
+  // no automatic start for speed
+  showFirework(false);
+}
+
+/* -------------------------
+   FIREWORK (short)
+   ------------------------- */
+function showFirework(show=true){
+  const area = document.getElementById('firework-area');
+  if(show){
+    area.style.display='block';
+    setTimeout(()=> area.style.display='none',900);
+  } else area.style.display='none';
 }
 
 /* =========================
-   FLASHCARDS (uses flashWords)
+   FLASHCARDS
    ========================= */
-const cardEl = document.getElementById('flashcard');
-const frontEl = document.getElementById('flash-front');
-const backEl = document.getElementById('flash-back');
-const flashProgressEl = document.getElementById('flash-progress');
-
+let flashOrder = [];
 let flashIndex = 0;
+const flashCard = document.getElementById('flashcard');
+const flashFront = document.getElementById('flash-front');
+const flashBack = document.getElementById('flash-back');
+const flashStatus = document.getElementById('flash-status');
 
-cardEl.addEventListener('click', () => {
-  cardEl.classList.toggle('flip');
-});
+flashCard.addEventListener('click', ()=> flashCard.classList.toggle('flip'));
 
-function renderFlashcard(){
-  if (!flashWords || flashWords.length === 0) {
-    frontEl.textContent = '';
-    backEl.textContent = '';
-    flashProgressEl.textContent = '';
+function startFlash_init(){
+  flashOrder = shuffleArray(activeWords.slice());
+  flashIndex = 0;
+  renderFlash();
+}
+function renderFlash(){
+  if(!flashOrder.length){
+    flashFront.textContent='—';
+    flashBack.textContent='';
+    flashStatus.textContent='';
     return;
   }
-  const w = flashWords[flashIndex];
-  frontEl.textContent = w.en;
-  backEl.textContent = w.uk;
-  flashProgressEl.textContent = `Card ${flashIndex + 1} of ${flashWords.length}`;
-  // ensure not flipped when rendering new content
-  cardEl.classList.remove('flip');
+  const w = flashOrder[flashIndex];
+  flashFront.textContent = w.en;
+  flashBack.textContent = w.uk;
+  flashStatus.textContent = `Картка ${flashIndex+1} з ${flashOrder.length}`;
+  flashCard.classList.remove('flip');
 }
-
-function nextCard(){
-  if (!flashWords || flashWords.length === 0) return;
-  flashIndex = (flashIndex + 1) % flashWords.length;
-  renderFlashcard();
+function nextFlash(){
+  if(!flashOrder.length) return;
+  flashIndex = (flashIndex+1)%flashOrder.length;
+  renderFlash();
 }
-function prevCard(){
-  if (!flashWords || flashWords.length === 0) return;
-  flashIndex = (flashIndex - 1 + flashWords.length) % flashWords.length;
-  renderFlashcard();
+function prevFlash(){
+  if(!flashOrder.length) return;
+  flashIndex = (flashIndex-1+flashOrder.length)%flashOrder.length;
+  renderFlash();
 }
-function shuffleFlashcards(){
-  if (!flashWords) return;
-  flashWords = shuffle(flashWords);
+function shuffleFlashOnly(){
+  flashOrder = shuffleArray(flashOrder);
   flashIndex = 0;
-  renderFlashcard();
-}
-function startFlashcards(){
-  // create a fresh flashWords array from words (keeps independent order)
-  flashWords = shuffle(words.slice());
-  flashIndex = 0;
-  renderFlashcard();
-}
-
-/* =========================
-   MATCHING GAME
-   ========================= */
-const matchGrid = document.getElementById('match-grid');
-let matchFirst = null;
-let matchPairsFound = 0;
-
-function startMatchGame(){
-  matchGrid.innerHTML = '';
-  matchFirst = null;
-  matchPairsFound = 0;
-  if (!words || words.length === 0) return;
-  // build tile list: each pair = en and uk
-  const tiles = [];
-  words.forEach(w => {
-    tiles.push({text: w.en, pair: w.uk});
-    tiles.push({text: w.uk, pair: w.en});
-  });
-  const shuffledTiles = shuffle(tiles);
-  shuffledTiles.forEach(item => {
-    const d = document.createElement('div');
-    d.className = 'tile';
-    d.textContent = item.text;
-    d.onclick = () => selectTile(d, item);
-    matchGrid.appendChild(d);
-  });
-  document.getElementById('match-status').textContent = '';
-}
-
-function selectTile(tileEl, item){
-  if (tileEl.classList.contains('matched')) return;
-  // reveal tile visually
-  tileEl.style.background = '#fde68a';
-  tileEl.style.transition = 'background 0.2s';
-  if (!matchFirst) {
-    matchFirst = {tileEl, item};
-    setTimeout(()=>{ tileEl.style.background = ''; }, 400);
-    return;
-  }
-  // second tile selected
-  const first = matchFirst;
-  if (first.item.pair === item.text || first.item.text === item.pair) {
-    first.tileEl.classList.add('matched');
-    tileEl.classList.add('matched');
-    // keep a slight visual to confirm match
-    first.tileEl.style.background = '';
-    tileEl.style.background = '';
-    matchPairsFound++;
-    if (matchPairsFound === words.length) {
-      document.getElementById('match-status').textContent = '🎉 All matched!';
-    }
-  } else {
-    // mismatch: flash both and hide back
-    first.tileEl.style.background = '#fecaca';
-    tileEl.style.background = '#fecaca';
-    setTimeout(() => {
-      first.tileEl.style.background = '';
-      tileEl.style.background = '';
-    }, 600);
-  }
-  matchFirst = null;
+  renderFlash();
 }
 
 /* =========================
    QUIZ
    ========================= */
+let quizOrder = [];
 let quizIndex = 0;
 let quizScore = 0;
 
 function startQuiz(){
-  quizIndex = 0;
-  quizScore = 0;
-  document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
-  nextQuizQuestion();
+  quizOrder = shuffleArray(activeWords.slice());
+  quizIndex = 0; quizScore = 0;
+  renderQuiz();
 }
-
-function nextQuizQuestion(){
-  const qEl = document.getElementById('quiz-question');
-  const oEl = document.getElementById('quiz-options');
-
-  if (!words || words.length === 0) {
-    qEl.textContent = '';
-    oEl.innerHTML = '';
+function renderQuiz(){
+  const qEl = document.getElementById('quiz-q');
+  const optsEl = document.getElementById('quiz-options');
+  const scoreEl = document.getElementById('quiz-score');
+  if(quizIndex >= quizOrder.length){
+    qEl.textContent = `🎉 Закінчено! Результат: ${quizScore}/${quizOrder.length}`;
+    optsEl.innerHTML = '';
+    scoreEl.textContent = `${quizScore}`;
+    showFirework(true);
     return;
   }
-
-  if (quizIndex >= words.length) {
-    qEl.textContent = `Done! Score: ${quizScore}/${words.length}`;
-    oEl.innerHTML = '';
-    return;
+  const w = quizOrder[quizIndex];
+  qEl.textContent = `Перекладіть: ${w.uk}`;
+  // build options
+  const opts = [w.en];
+  while(opts.length < 4){
+    const c = randItem(fullWords).en;
+    if(!opts.includes(c)) opts.push(c);
   }
-
-  const w = words[quizIndex];
-  qEl.textContent = `Translate: ${w.uk}`;
-  // build options (correct + random others from fullWords)
-  const options = [w.en];
-  while (options.length < 4) {
-    const candidate = fullWords[Math.floor(Math.random() * fullWords.length)].en;
-    if (!options.includes(candidate)) options.push(candidate);
-  }
-  const shuffledOptions = shuffle(options);
-  oEl.innerHTML = '';
-  shuffledOptions.forEach(opt => {
+  const shuffledOpts = shuffleArray(opts);
+  optsEl.innerHTML = '';
+  shuffledOpts.forEach(o=>{
     const btn = document.createElement('button');
-    btn.textContent = opt;
+    btn.textContent = o;
     btn.onclick = () => {
-      if (opt === w.en) quizScore++;
-      quizIndex++;
-      document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
-      nextQuizQuestion();
+      if(o === w.en){
+        quizScore++;
+        btn.classList.add('correct');
+      } else {
+        btn.classList.add('wrong');
+      }
+      // short delay to show color
+      setTimeout(()=>{ quizIndex++; renderQuiz(); }, 500);
     };
-    oEl.appendChild(btn);
+    optsEl.appendChild(btn);
   });
-  document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
+  scoreEl.textContent = `${quizScore}`;
 }
 
 /* =========================
    TYPING
    ========================= */
+let typingCurrent = null;
+let typingScore = 0;
 const typingWordEl = document.getElementById('typing-word');
 const typingInput = document.getElementById('typing-input');
-const typingScoreEl = document.getElementById('typing-score');
-const typingFeedbackEl = document.getElementById('typing-feedback');
-
-let typingScore = 0;
-let typingHandlerAttached = false;
-
-function initTypingHandler(){
-  if (typingHandlerAttached) return;
-  typingInput.addEventListener('keyup', typingKeyHandler);
-  typingHandlerAttached = true;
-}
-
-function typingKeyHandler(e){
-  if (e.key !== 'Enter') return;
-  handleTypingSubmit();
-}
+const typingAnswer = document.getElementById('typing-answer');
 
 function startTyping(){
   typingScore = 0;
-  typingScoreEl.textContent = `Score: ${typingScore}`;
-  nextTypingWord();
+  document.getElementById('typing-score').textContent = typingScore;
+  nextTyping();
+}
+function nextTyping(){
+  typingCurrent = randItem(activeWords);
+  typingWordEl.textContent = `${typingCurrent.uk}`;
+  typingAnswer.textContent = '';
   typingInput.value = '';
-  typingInput.disabled = false;
-  clearTypingFeedback();
-  initTypingHandler();
   typingInput.focus();
 }
-
-function nextTypingWord(){
-  if (!words || words.length === 0) {
-    typingWordEl.textContent = '';
-    typingWordEl.dataset.answer = '';
-    return;
-  }
-  const w = words[Math.floor(Math.random() * words.length)];
-  typingWordEl.textContent = `Translate: ${w.uk}`;
-  typingWordEl.dataset.answer = w.en;
-  clearTypingFeedback();
-}
-
-function showTypingFeedback(msg){
-  typingFeedbackEl.textContent = msg;
-}
-
-function clearTypingFeedback(){
-  typingFeedbackEl.textContent = '';
-}
-
-function handleTypingSubmit(){
-  if (!typingWordEl.dataset.answer) return;
+typingInput.addEventListener('keyup', (e)=>{
+  if(e.key !== 'Enter') return;
+  if(!typingCurrent) return;
   const user = typingInput.value.trim().toLowerCase();
-  const correct = typingWordEl.dataset.answer.trim().toLowerCase();
-  // disable input briefly while showing answer
-  typingInput.disabled = true;
-  if (user.length > 0 && user === correct) {
+  const correct = typingCurrent.en.trim().toLowerCase();
+  if(user && user === correct){
     typingScore++;
-    showTypingFeedback('Correct! ✅ — ' + typingWordEl.dataset.answer);
+    typingAnswer.textContent = '✅ Правильно: ' + typingCurrent.en;
+    typingAnswer.style.color = 'var(--accent)';
   } else {
-    showTypingFeedback('Wrong — correct: ' + typingWordEl.dataset.answer);
+    typingAnswer.textContent = '❌ Правильна відповідь: ' + typingCurrent.en;
+    typingAnswer.style.color = 'var(--danger)';
   }
-  typingScoreEl.textContent = `Score: ${typingScore}`;
-  // after delay go to next word and re-enable input
-  setTimeout(() => {
-    typingInput.disabled = false;
-    typingInput.value = '';
-    nextTypingWord();
-    typingInput.focus();
-  }, 1400);
+  document.getElementById('typing-score').textContent = typingScore;
+  setTimeout(nextTyping, 900);
+});
+
+/* =========================
+   HANGMAN / GUESS THE WORD
+   ========================= */
+let hangWord = null;
+let hangDisplay = [];
+let hangAttempts = 6;
+const hangUk = document.getElementById('hang-uk');
+const hangDisplayEl = document.getElementById('hang-display');
+const hangChances = document.getElementById('hang-chances');
+const hangLetters = document.getElementById('hang-letters');
+const hangStatus = document.getElementById('hang-status');
+
+function startHang_init(){
+  // build letter buttons once
+  hangLetters.innerHTML = '';
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  letters.forEach(l=>{
+    const b = document.createElement('button');
+    b.textContent = l;
+    b.className = 'letter-btn';
+    b.onclick = ()=> tryLetter(b, l);
+    hangLetters.appendChild(b);
+  });
 }
 
-function revealTypingAnswer(){
-  if (!typingWordEl.dataset.answer) return;
-  showTypingFeedback('Answer: ' + typingWordEl.dataset.answer);
-  // do not change score; allow user to continue
-  setTimeout(() => { clearTypingFeedback(); typingInput.focus(); }, 1300);
+function startHang(){
+  hangWord = randItem(activeWords);
+  const w = hangWord.en.toUpperCase();
+  hangDisplay = w.split('').map(ch => (/[A-Z]/.test(ch) ? '_' : ch));
+  hangAttempts = Math.max(4, Math.ceil(w.length / 2)); // dynamic attempts
+  renderHang();
+  // enable all letter buttons
+  document.querySelectorAll('#hang-letters .letter-btn').forEach(b=>{
+    b.disabled = false; b.classList.remove('disabled'); b.style.background='';
+  });
+  showHangStatus('');
 }
 
-function skipTypingWord(){
-  // skip without changing score, show correct briefly
-  if (!typingWordEl.dataset.answer) return;
-  showTypingFeedback('Skipped — answer: ' + typingWordEl.dataset.answer);
-  setTimeout(() => {
-    clearTypingFeedback();
-    typingInput.value = '';
-    nextTypingWord();
-    typingInput.focus();
-  }, 900);
+function renderHang(){
+  hangUk.textContent = hangWord ? hangWord.uk : '';
+  hangDisplayEl.textContent = hangDisplay.join(' ');
+  hangChances.textContent = `Спроби: ${hangAttempts}`;
+}
+
+function tryLetter(btn, letter){
+  if(!hangWord || btn.disabled) return;
+  btn.disabled = true; btn.classList.add('disabled');
+  const w = hangWord.en.toUpperCase();
+  let found = false;
+  for(let i=0;i<w.length;i++){
+    if(w[i] === letter){
+      hangDisplay[i] = letter;
+      found = true;
+    }
+  }
+  if(!found){
+    hangAttempts--;
+    btn.style.background = '#fee2e2';
+  } else {
+    btn.style.background = '#bbf7d0';
+  }
+  renderHang();
+  checkHangEnd();
+}
+
+function checkHangEnd(){
+  const joined = hangDisplay.join('');
+  if(!joined.includes('_')){
+    showHangStatus('🎉 Ви відгадали!'); showFirework(true);
+  } else if(hangAttempts <= 0){
+    showHangStatus('💥 Ви програли. Слово: ' + hangWord.en);
+  }
+}
+
+function showHangStatus(msg){
+  hangStatus.textContent = msg || '';
 }
 
 /* =========================
-   Initialize on load
+   SCRAMBLE
    ========================= */
-resetAll(); // sets subset and starts all games
+let scrambleCurrent = null;
+const scrambleUk = document.getElementById('scramble-uk');
+const scrambleBox = document.getElementById('scramble-box');
+const scrambleInput = document.getElementById('scramble-input');
+const scrambleStatus = document.getElementById('scramble-status');
 
+function newScramble(){
+  scrambleInput.value = '';
+  scrambleStatus.textContent = '';
+  scrambleCurrent = randItem(activeWords);
+  scrambleUk.textContent = scrambleCurrent.uk;
+  const letters = scrambleCurrent.en.split('');
+  const scrambled = shuffleArray(letters);
+  scrambleBox.innerHTML = '';
+  scrambled.forEach(ch=>{
+    const span = document.createElement('button');
+    span.textContent = ch;
+    span.className = 'letter-btn';
+    span.onclick = ()=> { scrambleInput.value += ch; };
+    scrambleBox.appendChild(span);
+  });
+  scrambleInput.focus();
+}
+function checkScramble(){
+  const val = scrambleInput.value.trim().toLowerCase();
+  if(!scrambleCurrent) return;
+  if(val === scrambleCurrent.en.toLowerCase()){
+    scrambleStatus.textContent = '✅ Правильно!';
+    scrambleStatus.style.color = 'var(--accent)';
+    showFirework(true);
+  } else {
+    scrambleStatus.textContent = '❌ Неправильно. Правильна: ' + scrambleCurrent.en;
+    scrambleStatus.style.color = 'var(--danger)';
+  }
+  setTimeout(newScramble, 1000);
+}
+
+/* =========================
+   SPEED TEST (30s)
+   ========================= */
+let speedInterval = null;
+let speedTimeLeft = 30;
+let speedScore = 0;
+let speedCurrent = null;
+const speedTimer = document.getElementById('speed-timer');
+const speedUk = document.getElementById('speed-uk');
+const speedInput = document.getElementById('speed-input');
+const speedStatus = document.getElementById('speed-status');
+const speedScoreEl = document.getElementById('speed-score');
+
+function startSpeed(){
+  speedTimeLeft = 30;
+  speedScore = 0;
+  speedScoreEl.textContent = speedScore;
+  speedStatus.textContent = '';
+  speedInput.value = '';
+  speedInput.disabled = false;
+  nextSpeedWord();
+  speedTimer.textContent = `${speedTimeLeft}s`;
+  if(speedInterval) clearInterval(speedInterval);
+  speedInterval = setInterval(()=>{
+    speedTimeLeft--;
+    speedTimer.textContent = `${speedTimeLeft}s`;
+    if(speedTimeLeft <= 0){
+      clearInterval(speedInterval);
+      endSpeed();
+    }
+  },1000);
+  speedInput.focus();
+}
+
+function nextSpeedWord(){
+  speedCurrent = randItem(activeWords);
+  speedUk.textContent = speedCurrent.uk;
+  speedInput.value = '';
+}
+
+speedInput.addEventListener('keyup', (e)=>{
+  if(e.key !== 'Enter') return;
+  if(!speedCurrent || speedTimeLeft <= 0) return;
+  const val = speedInput.value.trim().toLowerCase();
+  if(val === speedCurrent.en.toLowerCase()){
+    speedScore++;
+    speedStatus.textContent = '✅';
+    speedStatus.style.color = 'var(--accent)';
+  } else {
+    speedStatus.textContent = '❌ ' + speedCurrent.en;
+    speedStatus.style.color = 'var(--danger)';
+  }
+  speedScoreEl.textContent = speedScore;
+  nextSpeedWord();
+});
+
+function endSpeed(){
+  speedInput.disabled = true;
+  speedUk.textContent = '';
+  speedStatus.textContent = `Час вийшов! Ви набрали ${speedScore} правильних.`;
+  if(speedScore > Math.max(1, Math.floor(activeWords.length/3))) showFirework(true);
+}
+
+/* =========================
+   INIT ALL
+   ========================== */
+function initAllGames(){
+  buildActive();
+  startFlash_init();
+  startQuiz();
+  startTyping();
+  startHang_init();
+  startHang(); // start first hang
+  newScramble();
+  // speed remains idle until user presses start
+}
+
+function initPage(){
+  // default build
+  buildActive();
+  initAllGames();
+  openGame('flash');
+}
+
+initPage();
+
+/* keyboard helpers */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === '1') openGame('flash');
+  if(e.key === '2') openGame('quiz');
+  if(e.key === '3') openGame('typing');
+  if(e.key === '4') openGame('hang');
+  if(e.key === '5') openGame('scramble');
+  if(e.key === '6') openGame('speed');
+});
 </script>
 </body>
 </html>
