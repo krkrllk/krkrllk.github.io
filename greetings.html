@@ -95,50 +95,6 @@ animation:burst .8s ease-out forwards}
   </div>
 
   <main>
-    <!-- FLASHCARDS -->
-    <section id="flash" class="game visible">
-      <div class="flash-wrap">
-        <div class="flashbox">
-          <div class="card" id="fcard" title="Клік — перевернути">
-            <div class="face front" id="f-front"></div>
-            <div class="face back" id="f-back"></div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="small" onclick="prevFlash()">⬅️</button>
-          <button class="small" onclick="shuffleFlash()">🔀 Shuffle</button>
-          <button class="small" onclick="nextFlash()">➡️</button>
-          <button class="small" onclick="speakCurrent()">🔊 Speak</button>
-        </div>
-        <div id="f-status" style="font-weight:700;margin-top:8px"></div>
-      </div>
-    </section>
-
-    <!-- DIALOG BUILDER -->
-    <section id="dialog" class="game">
-      <div class="dialog-area">
-        <div style="font-weight:700">Склади діалог у правильному порядку. Перетягуй фрази у праве поле. Можна повертати назад.</div>
-        <div style="display:flex;gap:12px;flex-direction:column;align-items:center;width:100%">
-          <div style="width:100%;display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-            <div style="flex:1;min-width:220px">
-              <div style="font-weight:600;margin-bottom:8px">Пул фраз (натисни і перетягни)</div>
-              <div id="dialog-pool" class="draggables" ondragover="event.preventDefault()" ondrop="onDropToPool(event)"></div>
-            </div>
-            <div style="flex:1;min-width:220px">
-              <div style="font-weight:600;margin-bottom:8px">Зроби діалог тут (drop)</div>
-              <div id="dialog-drop" class="dropzone" ondragover="event.preventDefault()" ondrop="onDropToZone(event)"></div>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:8px">
-            <button class="small" onclick="checkDialog()">Перевірити</button>
-            <button class="small" onclick="resetDialog()">Нове</button>
-            <button class="small" onclick="showCorrectDialog()">Показати правильний</button>
-          </div>
-          <div id="dialog-status" style="font-weight:700;margin-top:8px"></div>
-        </div>
-      </div>
-    </section>
 
     <!-- MATCH PAIRS -->
     <section id="match" class="game">
@@ -183,8 +139,7 @@ animation:burst .8s ease-out forwards}
 
   </main>
 
-  <div class="footer">Збережи файл як <code>greetings.html</code> і відкрий у браузері — все працює офлайн</div>
-</div>
+
 
 <div id="fire" class="fire" style="display:none"><div class="burst"></div></div>
 
