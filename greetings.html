@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Greetings & Introductions — Games (updated)</title>
+<title>Greetings & Introductions — Games</title>
 <style>
 :root{
   --primary:#2563eb; --accent:#16a34a; --danger:#dc2626;
@@ -24,64 +24,35 @@ main{margin-top:12px}
 .game{display:none;background:var(--card);padding:16px;border-radius:12px;box-shadow:0 8px 28px rgba(2,6,23,0.06)}
 .visible{display:block}
 
-/* Flashcards */
-.flash-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
-.flashbox{perspective:1100px;width:360px;height:220px}
-.card{width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s;cursor:pointer;position:relative;border-radius:12px}
-.card.flip{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;border-radius:12px;padding:16px;text-align:center}
-.front{background:linear-gradient(135deg,#fff,#eef2ff);box-shadow:0 8px 28px rgba(2,6,23,0.08)}
-.back{background:linear-gradient(135deg,#dbeafe,#e0f2fe);transform:rotateY(180deg)}
-
-/* Dialog builder */
-.dialog-area{display:flex;gap:14px;flex-direction:column;align-items:center}
-.draggables{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:900px;padding:8px;border-radius:8px}
-.dropzone{min-height:70px;min-width:60%;border:2px dashed #cbd5e1;border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-start;background:#fbfbff}
-
 /* Match */
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:900px;margin:0 auto}
-.tile{background:#fff;padding:12px;border-radius:10px;box-shadow:0 6px 16px rgba(2,6,23,0.06);cursor:pointer;text-align:center;font-weight:700}
+.tile{background:#fff;padding:12px;border-radius:10px;box-shadow:0 6px 16px rgba(2,6,23,0.06);cursor:pointer;text-align:center;font-weight:700;user-select:none}
 
-/* Listening / Quiz */
-.options{display:flex;flex-direction:column;gap:8px;align-items:center}
-
-/* Typing */
+/* Buttons */
+button.small{padding:8px 10px;border-radius:8px;border:none;cursor:pointer;background:#64748b;color:white}
 input[type=text]{padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;width:60%;max-width:420px}
 
-/* small buttons */
-.small{padding:8px 10px;border-radius:8px;border:none;cursor:pointer;background:#64748b;color:white}
-
-/* Firework */
-.fire{position:fixed;left:50%;top:20%;transform:translateX(-50%);pointer-events:none;z-index:9999}
-.burst{width:8px;height:8px;background:transparent;box-shadow:
-  0 -40px 0 0 #ff7ab6,28px -28px 0 0 #ffb86e,40px 0 0 0 #ffd166,28px 28px 0 0 #7ee7c7,0 40px 0 0 #8bd3ff,-28px 28px 0 0 #d3b7ff,-40px 0 0 0 #ff9a9e,-28px -28px 0 0 #f6f59d;
-animation:burst .8s ease-out forwards}
-@keyframes burst{from{opacity:0;transform:scale(.2)}50%{opacity:1}to{opacity:0;transform:scale(1.6)}}
-
+/* layout */
+.options{display:flex;flex-direction:column;gap:8px;align-items:center}
 .footer{margin:18px 0;text-align:center;color:var(--muted);font-size:13px}
-@media (max-width:720px){
-  .card{font-size:18px}
-  .flashbox{width:300px;height:180px}
-  .grid{grid-template-columns:repeat(2,1fr)}
-  input[type=text]{width:86%}
-}
+@media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}input[type=text]{width:86%}}
 </style>
 </head>
 <body>
 <header>
   <div class="header-row">
-    <h1>Greetings & Introductions — Ігри (оновлено)</h1>
+    <h1>Greetings & Introductions — Ігри</h1>
   </div>
 </header>
 
 <div class="container">
   <div class="topbar">
-    <button class="tab" onclick="openGame('flash')">🃏 Флеш-картки</button>
-    <button class="tab" onclick="openGame('dialog')">💬 Dialog Builder</button>
     <button class="tab" onclick="openGame('match')">🧩 Match Pairs</button>
     <button class="tab" onclick="openGame('listen')">🎧 Listening</button>
     <button class="tab" onclick="openGame('type')">✍️ Typing</button>
     <button class="tab" onclick="openGame('speed')">⏱️ Speed Quiz</button>
+    <button class="tab" onclick="openGame('quiz')">❓ Multiple Choice</button>
+    <button class="tab" onclick="openGame('order')">🔢 Order Sentences</button>
 
     <div class="controls">
       <label>Підмножина:</label>
@@ -95,101 +66,63 @@ animation:burst .8s ease-out forwards}
   </div>
 
   <main>
-    <!-- FLASHCARDS -->
-    <section id="flash" class="game visible">
-      <div class="flash-wrap">
-        <div class="flashbox">
-          <div class="card" id="fcard" title="Клік — перевернути">
-            <div class="face front" id="f-front"></div>
-            <div class="face back" id="f-back"></div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="small" onclick="prevFlash()">⬅️</button>
-          <button class="small" onclick="shuffleFlash()">🔀 Shuffle</button>
-          <button class="small" onclick="nextFlash()">➡️</button>
-          <button class="small" onclick="speakCurrent()">🔊 Speak</button>
-        </div>
-        <div id="f-status" style="font-weight:700;margin-top:8px"></div>
-      </div>
-    </section>
-
-    <!-- DIALOG BUILDER -->
-    <section id="dialog" class="game">
-      <div class="dialog-area">
-        <div style="font-weight:700">Склади діалог у правильному порядку. Перетягуй фрази у праве поле. Можна повертати назад.</div>
-        <div style="display:flex;gap:12px;flex-direction:column;align-items:center;width:100%">
-          <div style="width:100%;display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-            <div style="flex:1;min-width:220px">
-              <div style="font-weight:600;margin-bottom:8px">Пул фраз (натисни і перетягни)</div>
-              <div id="dialog-pool" class="draggables" ondragover="event.preventDefault()" ondrop="onDropToPool(event)"></div>
-            </div>
-            <div style="flex:1;min-width:220px">
-              <div style="font-weight:600;margin-bottom:8px">Зроби діалог тут (drop)</div>
-              <div id="dialog-drop" class="dropzone" ondragover="event.preventDefault()" ondrop="onDropToZone(event)"></div>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:8px">
-            <button class="small" onclick="checkDialog()">Перевірити</button>
-            <button class="small" onclick="resetDialog()">Нове</button>
-            <button class="small" onclick="showCorrectDialog()">Показати правильний</button>
-          </div>
-          <div id="dialog-status" style="font-weight:700;margin-top:8px"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MATCH PAIRS -->
-    <section id="match" class="game">
-      <div style="font-weight:700;margin-bottom:8px">Знайди відповідності (англійське ↔ українське)</div>
+    <!-- MATCH -->
+    <section id="match" class="game visible">
+      <h2>Match English with Ukrainian</h2>
       <div class="grid" id="match-grid"></div>
-      <div id="match-status" class="status" style="margin-top:8px"></div>
+      <div style="margin-top:12px;font-weight:700" id="match-status"></div>
     </section>
 
     <!-- LISTENING -->
     <section id="listen" class="game">
-      <div style="font-weight:700">Слухай англійську і вибирай переклад</div>
-      <div style="margin-top:12px">
-        <button class="small" onclick="playListening()">🔊 Play</button>
-        <button class="small" onclick="shuffleListening()">🔀 Next set</button>
-      </div>
-      <div id="listen-uk" style="font-weight:800;margin-top:10px"></div>
+      <h2>Listening Game</h2>
+      <button class="small" onclick="playListen()">🎧 Play Audio</button>
       <div class="options" id="listen-options"></div>
-      <div id="listen-score" class="status" style="margin-top:8px"></div>
+      <div style="margin-top:12px;font-weight:700" id="listen-status"></div>
     </section>
 
     <!-- TYPING -->
     <section id="type" class="game">
-      <div style="font-weight:700">Бачиш українське — напиши англійською</div>
-      <div style="margin-top:10px;font-size:18px" id="type-uk"></div>
-      <input id="type-input" type="text" placeholder="Введіть англійською і натисніть Enter">
-      <div style="margin-top:8px" id="type-feedback" class="status"></div>
-      <div style="margin-top:8px">Рахунок: <span id="type-score" class="score">0</span></div>
+      <h2>Typing Game</h2>
+      <div id="type-question" style="font-weight:700;margin-bottom:8px"></div>
+      <input type="text" id="type-answer" placeholder="Напиши англійською"/>
+      <button class="small" onclick="checkTyping()">Check</button>
+      <div style="margin-top:12px;font-weight:700" id="type-status"></div>
     </section>
 
-    <!-- SPEED -->
+    <!-- SPEED QUIZ -->
     <section id="speed" class="game">
-      <div style="display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap">
-        <div style="font-weight:700">Speed Quiz — 30 секунд</div>
-        <button class="small" onclick="startSpeed()">Start</button>
-        <div id="speed-timer" style="font-weight:800">30s</div>
-      </div>
-      <div style="margin-top:12px;font-size:18px" id="speed-uk"></div>
-      <input id="speed-input" type="text" placeholder="Відповідь англійською">
-      <div id="speed-status" class="status" style="margin-top:8px"></div>
-      <div style="margin-top:8px">Правильно: <span id="speed-score" class="score">0</span></div>
+      <h2>Speed Quiz</h2>
+      <div id="speed-question" style="font-weight:700;margin-bottom:8px"></div>
+      <input type="text" id="speed-answer" placeholder="Напиши англійською"/>
+      <button class="small" onclick="checkSpeed()">Check</button>
+      <div style="margin-top:12px;font-weight:700" id="speed-status"></div>
     </section>
 
+    <!-- MULTIPLE CHOICE QUIZ -->
+    <section id="quiz" class="game">
+      <h2>Multiple Choice Quiz</h2>
+      <div id="quiz-question" style="font-weight:700;margin-bottom:8px"></div>
+      <div id="quiz-options" class="options"></div>
+      <div style="margin-top:12px;font-weight:700" id="quiz-status"></div>
+    </section>
+
+    <!-- ORDER SENTENCES -->
+    <section id="order" class="game">
+      <h2>Order Sentences</h2>
+      <div style="margin-bottom:8px">Перетягни англійські фрази у правильному порядку:</div>
+      <div id="order-pool" class="grid"></div>
+      <div style="margin-top:12px;font-weight:700" id="order-status"></div>
+      <button class="small" onclick="startOrder()">Нове</button>
+    </section>
   </main>
 
-
-
-<div id="fire" class="fire" style="display:none"><div class="burst"></div></div>
+  <div class="footer">Збережи файл як <code>greetings.html</code> і відкрий у браузері — працює офлайн</div>
+</div>
 
 <script>
-/* ===== phrases ===== */
-const full = [
+// ===== phrases =====
+const full=[
  {en:"Hello!", uk:"Привіт!"},
  {en:"Hi, how are you?", uk:"Привіт, як ти?"},
  {en:"Nice to meet you.", uk:"Приємно познайомитися."},
@@ -211,317 +144,176 @@ const full = [
  {en:"Make yourself at home.", uk:"Почувайся як удома."},
  {en:"It’s good to see you.", uk:"Радий тебе бачити."}
 ];
+// ===== helpers =====
+function shuffle(a){const arr=a.slice();for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function pick(n){return shuffle(full).slice(0,n);}
+function rand(a){return a[Math.floor(Math.random()*a.length)];}
 
-/* ===== helpers ===== */
-function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr;}
-function pick(n){ return shuffle(full).slice(0,n); }
-function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
-function firework(){ const el=document.getElementById('fire'); el.style.display='block'; setTimeout(()=>el.style.display='none',900); }
+// ===== active subset =====
+let active=[];
+function buildActive(){const n=parseInt(document.getElementById('count').value,10)||20;active=pick(n);}
 
-/* ===== active subset ===== */
-let active = pick(20);
-function buildActive(){ const n = parseInt(document.getElementById('count').value,10)||20; active = pick(n); }
+// ===== UI switching =====
+function openGame(id){document.querySelectorAll('.game').forEach(g=>g.classList.remove('visible'));document.getElementById(id).classList.add('visible');}
 
-/* ===== UI switching ===== */
-function openGame(id){ document.querySelectorAll('.game').forEach(g=>g.classList.remove('visible')); document.getElementById(id).classList.add('visible'); }
-
-/* ===== FLASHCARDS ===== */
-let fOrder=[], fIndex=0;
-const fcard = document.getElementById('fcard'), ffront=document.getElementById('f-front'), fback=document.getElementById('f-back'), fstatus=document.getElementById('f-status');
-fcard.addEventListener('click', ()=> fcard.classList.toggle('flip'));
-function startFlash(){
-  fOrder = shuffle(active.slice()); fIndex=0; renderFlash();
-}
-function renderFlash(){
-  if(!fOrder.length){ ffront.textContent='—'; fback.textContent=''; fstatus.textContent=''; return; }
-  const w=fOrder[fIndex]; ffront.textContent=w.en; fback.textContent=w.uk; fstatus.textContent=`Картка ${fIndex+1} / ${fOrder.length}`; fcard.classList.remove('flip');
-}
-function nextFlash(){ if(!fOrder.length) return; fIndex=(fIndex+1)%fOrder.length; renderFlash(); }
-function prevFlash(){ if(!fOrder.length) return; fIndex=(fIndex-1+fOrder.length)%fOrder.length; renderFlash(); }
-function shuffleFlash(){ fOrder = shuffle(fOrder); fIndex=0; renderFlash(); }
-function speak(text){ if(!('speechSynthesis' in window)) return; const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }
-function speakCurrent(){ if(!fOrder.length) return; speak(fOrder[fIndex].en); }
-
-/* ===== DIALOG BUILDER (one correct order, draggable both ways, reorderable) ===== */
-let dialogCorrect = []; // correct sequence (array of objects)
-let poolItems = []; // DOM items in pool have id 'pool-i'
-function startDialog(){
-  // We'll build a meaningful dialog sequence of length up to 5 if possible:
-  // prefer: greeting, ask name, answer, where from, answer
-  const subset = shuffle(active.slice());
-  // heuristics for certain roles
-  const greet = subset.find(x=>/hello|hi|long time|how’s it|what’s up/i.test(x.en.toLowerCase()));
-  const askName = subset.find(x=>/what’s your name|name/i.test(x.en.toLowerCase()));
-  const myName = subset.find(x=>/my name is|i am …|i am/i.test(x.en.toLowerCase()));
-  const where = subset.find(x=>/where are you from|where/i.test(x.en.toLowerCase()));
-  const from = subset.find(x=>/i’m from/i.test(x.en.toLowerCase()));
-  dialogCorrect = [];
-  [greet, askName, myName, where, from].forEach(s=>{ if(s && !dialogCorrect.includes(s)) dialogCorrect.push(s); });
-  // fill up to 5
-  for(let i=0;i<subset.length && dialogCorrect.length<5;i++){
-    const s = subset[i];
-    if(!dialogCorrect.includes(s)) dialogCorrect.push(s);
-  }
-  if(dialogCorrect.length < 2) dialogCorrect = subset.slice(0, Math.min(4, subset.length));
-  // make pool (shuffled)
-  const pool = shuffle(dialogCorrect.slice()).map((w,i)=>({id:i, en:w.en, uk:w.uk}));
-  poolItems = pool;
-  // render pool and empty dropzone
-  const poolEl = document.getElementById('dialog-pool'), drop=document.getElementById('dialog-drop');
-  poolEl.innerHTML=''; drop.innerHTML='';
-  pool.forEach(item=>{
-    const b = document.createElement('button');
-    b.textContent = `${item.en} (${item.uk})`;
-    b.className = 'small';
-    b.id = 'pool-'+item.id;
-    b.draggable = true;
-    b.style.margin = '6px';
-    b.dataset.idx = item.id;
-    b.ondragstart = (ev)=> {
-      ev.dataTransfer.setData('text/plain', b.id);
-      // mark source
-      ev.dataTransfer.setData('source','pool');
-    };
-    poolEl.appendChild(b);
-  });
-  // allow drop events handled below (onDropToZone / onDropToPool)
-  document.getElementById('dialog-status').textContent='';
-}
-
-// helper: find correct id sequence (dialogCorrect mapped to pool ids)
-function getCorrectIdSeq(){ 
-  // dialogCorrect contains objects; poolItems contain mapping id->object
-  // we need to map dialogCorrect order to pool ids by comparing en+uk
-  const seq = [];
-  dialogCorrect.forEach(dc=>{
-    const found = poolItems.find(p=>p.en===dc.en && p.uk===dc.uk);
-    if(found) seq.push('pool-'+found.id);
-  });
-  return seq;
-}
-
-// drop handlers
-function onDropToZone(ev){
-  ev.preventDefault();
-  const id = ev.dataTransfer.getData('text/plain');
-  if(!id) return;
-  const el = document.getElementById(id);
-  if(!el) return;
-  const zone = document.getElementById('dialog-drop');
-  // If element already in zone -> reorder
-  if(zone.contains(el)){
-    // find position to insert by pointer y (or x)
-    insertAtPointer(zone, ev.clientX, ev.clientY, el);
-  } else {
-    // move from pool to zone: append or insert at pointer
-    insertAtPointer(zone, ev.clientX, ev.clientY, el);
-    el.draggable = true;
-    // change dragstart to mark source as drop now
-    el.ondragstart = (e)=> {
-      e.dataTransfer.setData('text/plain', el.id);
-      e.dataTransfer.setData('source','drop');
-    };
-  }
-}
-
-function onDropToPool(ev){
-  ev.preventDefault();
-  const id = ev.dataTransfer.getData('text/plain');
-  if(!id) return;
-  const el = document.getElementById(id);
-  if(!el) return;
-  const pool = document.getElementById('dialog-pool');
-  // If already in pool, reorder (append)
-  pool.appendChild(el);
-  // restore dragstart to mark source pool
-  el.ondragstart = (e)=> {
-    e.dataTransfer.setData('text/plain', el.id);
-    e.dataTransfer.setData('source','pool');
-  };
-}
-
-// Insert element into container at the child position nearest pointer
-function insertAtPointer(container, clientX, clientY, element){
-  const children = Array.from(container.children).filter(c=>c !== element);
-  if(children.length===0){ container.appendChild(element); return; }
-  let inserted = false;
-  for(const child of children){
-    const rect = child.getBoundingClientRect();
-    // decide based on X coordinate primarily, fallback to Y
-    if(clientX < rect.left + rect.width/2){
-      container.insertBefore(element, child);
-      inserted = true;
-      break;
-    }
-  }
-  if(!inserted) container.appendChild(element);
-}
-
-// check dialog correctness
-function checkDialog(){
-  const zone = document.getElementById('dialog-drop');
-  const children = Array.from(zone.children);
-  const userSeq = children.map(c=>c.id);
-  const correctSeq = getCorrectIdSeq();
-  // if lengths differ, not correct
-  if(userSeq.length !== correctSeq.length){
-    document.getElementById('dialog-status').textContent = 'Розмістіть всі фрази у діалог';
-    return;
-  }
-  // Compare
-  let ok = true;
-  for(let i=0;i<correctSeq.length;i++){
-    if(userSeq[i] !== correctSeq[i]) { ok = false; break; }
-  }
-  if(ok){
-    document.getElementById('dialog-status').textContent = '🎉 Чудово! Правильний порядок!';
-    firework();
-  } else {
-    document.getElementById('dialog-status').textContent = '❌ Неправильно — спробуй переставити';
-  }
-}
-
-function resetDialog(){ startDialog(); }
-function showCorrectDialog(){
-  const zone = document.getElementById('dialog-drop');
-  zone.innerHTML='';
-  const seq = getCorrectIdSeq();
-  seq.forEach(id=>{
-    const orig = document.getElementById(id);
-    // clone original if pool lacks it
-    let el = orig;
-    if(!el){
-      // find pool item by id pattern (should exist)
-      el = document.createElement('button');
-      const pid = id.replace('pool-','');
-      const p = poolItems.find(x=>String(x.id)===pid);
-      el.textContent = `${p.en} (${p.uk})`;
-      el.className='small';
-      el.id = id;
-    }
-    // attach dragstart for drop->pool moves
-    el.draggable = true;
-    el.ondragstart = (e)=> {
-      e.dataTransfer.setData('text/plain', el.id);
-      e.dataTransfer.setData('source','drop');
-    };
-    zone.appendChild(el);
-  });
-  document.getElementById('dialog-status').textContent = 'Показано правильний порядок';
-}
-
-/* ===== MATCH PAIRS ===== */
+// ===== MATCH =====
+let matchGrid=[];
 function startMatch(){
-  const pool = shuffle(active.slice());
-  const n = Math.min(pool.length, 8);
-  const chosen = pool.slice(0,n);
-  const tiles = [];
-  chosen.forEach(w=>{ tiles.push({text:w.en, id:w.en, pair:w.uk}); tiles.push({text:w.uk, id:w.en, pair:w.en}); });
-  const shuffled = shuffle(tiles);
-  const grid = document.getElementById('match-grid'); grid.innerHTML=''; let first=null; let found=0;
-  shuffled.forEach((t,idx)=>{
-    const d = document.createElement('div');
-    d.className='tile';
-    d.textContent=t.text;
-    d.dataset.id = t.id;
-    d.dataset.pair = t.pair;
-    d.onclick = ()=>{
-      if(d.classList.contains('matched')) return;
-      d.style.transform='scale(.98)';
-      setTimeout(()=>d.style.transform='scale(1)',120);
-      if(!first){ first = d; d.style.background='#fde68a'; return; }
-      if(first.dataset.id === d.dataset.id && first !== d){
-        first.classList.add('matched'); d.classList.add('matched');
-        first.style.background='#bbf7d0'; d.style.background='#bbf7d0';
-        found++;
-        if(found === n) { document.getElementById('match-status').textContent='🎉 Усі пари знайдені!'; firework(); }
-      } else {
-        first.style.background=''; d.style.background='#fecaca';
-        setTimeout(()=>{ if(first) first.style.background=''; if(d) d.style.background=''; },600);
-      }
-      first = null;
-    };
-    grid.appendChild(d);
-  });
-  document.getElementById('match-status').textContent='';
+ buildActive();
+ const container=document.getElementById('match-grid');
+ container.innerHTML='';
+ let items=[];
+ active.forEach(x=>{items.push({text:x.en,type:'en'});items.push({text:x.uk,type:'uk'});});
+ matchGrid=shuffle(items);
+ matchGrid.forEach((t,i)=>{
+   const div=document.createElement('div');div.className='tile';div.textContent=t.text;
+   div.dataset.type=t.type;div.dataset.index=i;div.dataset.matched='0';
+   div.onclick=matchClick;
+   container.appendChild(div);
+ });
+ matchSelected=[];document.getElementById('match-status').textContent='';
+}
+let matchSelected=[];
+function matchClick(e){
+ const i=parseInt(e.target.dataset.index); 
+ const tile=matchGrid[i];
+ if(tile.matched==='1')return;
+ if(matchSelected.includes(i))return;
+ matchSelected.push(i);
+ if(matchSelected.length===2){
+   const first=matchGrid[matchSelected[0]],second=matchGrid[matchSelected[1]];
+   const correct=(first.type==='en' && second.type==='uk' && active.some(x=>x.en===first.text && x.uk===second.text))||
+                 (first.type==='uk' && second.type==='en' && active.some(x=>x.en===second.text && x.uk===first.text));
+   if(correct){
+      first.matched=second.matched='1';
+      document.getElementById('match-status').textContent='Correct!';
+   }else{
+      document.getElementById('match-status').textContent='Wrong! Try again.';
+   }
+   matchSelected=[];
+ }
 }
 
-/* ===== LISTENING ===== */
-let listenOrder=[], listenIndex=0, listenScore=0;
-function startListening(){
-  listenOrder = shuffle(active.slice());
-  listenIndex = 0; listenScore = 0;
-  renderListening();
+// ===== LISTENING =====
+let listenCurrent='';
+function startListen(){
+ buildActive();
+ listenCurrent=rand(active).en;
+ const opts=[listenCurrent];
+ while(opts.length<Math.min(4,active.length)){
+   const o=rand(active).en;
+   if(!opts.includes(o))opts.push(o);
+ }
+ const shuffled=shuffle(opts);
+ const container=document.getElementById('listen-options');container.innerHTML='';
+ shuffled.forEach(t=>{
+   const b=document.createElement('button');b.className='small';b.textContent=t;b.onclick=()=>checkListen(t);
+   container.appendChild(b);
+ });
+ document.getElementById('listen-status').textContent='';
 }
-function renderListening(){
-  const ukEl = document.getElementById('listen-uk'), opts = document.getElementById('listen-options');
-  if(listenIndex >= listenOrder.length){ ukEl.textContent='Готово!'; opts.innerHTML=''; document.getElementById('listen-score').textContent = `Рахунок: ${listenScore}/${listenOrder.length}`; firework(); return; }
-  const item = listenOrder[listenIndex];
-  ukEl.textContent = 'Слухаємо...';
-  const options = [item.uk];
-  while(options.length < 4){ const c = rand(active).uk; if(!options.includes(c)) options.push(c); }
-  const shuffledOpts = shuffle(options);
-  opts.innerHTML = '';
-  shuffledOpts.forEach(o=>{
-    const b = document.createElement('button'); b.className='small'; b.textContent=o; b.style.margin='6px';
-    b.onclick = ()=>{
-      if(o === item.uk){ listenScore++; b.style.background='#bbf7d0'; }
-      else { b.style.background='#fecaca'; }
-      listenIndex++; setTimeout(()=>renderListening(),400);
-    };
-    opts.appendChild(b);
-  });
-  speak(item.en);
-  document.getElementById('listen-score').textContent = `Рахунок: ${listenScore}/${listenOrder.length}`;
+function playListen(){if(listenCurrent)new SpeechSynthesisUtterance(listenCurrent)&&speechSynthesis.speak(new SpeechSynthesisUtterance(listenCurrent));}
+function checkListen(sel){
+ if(sel===listenCurrent){document.getElementById('listen-status').textContent='Correct! 🎉';}else{document.getElementById('listen-status').textContent='Wrong!';}
 }
-function playListening(){ renderListening(); }
-function shuffleListening(){ startListening(); }
 
-/* ===== TYPING ===== */
-let typeCurrent=null, typeScore=0;
-function startTyping(){ typeScore=0; document.getElementById('type-score').textContent=typeScore; nextType(); }
-function nextType(){ typeCurrent = rand(active); document.getElementById('type-uk').textContent = typeCurrent.uk; document.getElementById('type-input').value=''; document.getElementById('type-input').focus(); document.getElementById('type-feedback').textContent=''; }
-document.getElementById('type-input').addEventListener('keyup', (e)=>{
-  if(e.key !== 'Enter') return;
-  const val = e.target.value.trim().toLowerCase();
-  if(!typeCurrent) return;
-  if(val === typeCurrent.en.toLowerCase()){ typeScore++; document.getElementById('type-feedback').textContent='✅ Правильно'; document.getElementById('type-feedback').style.color='green'; }
-  else { document.getElementById('type-feedback').textContent=`❌ Правильна: ${typeCurrent.en}`; document.getElementById('type-feedback').style.color='red'; }
-  document.getElementById('type-score').textContent = typeScore;
-  setTimeout(nextType,800);
-});
+// ===== TYPING =====
+let typeCurrent='';
+function startType(){
+ buildActive();
+ typeCurrent=rand(active).uk;
+ document.getElementById('type-question').textContent=typeCurrent;
+ document.getElementById('type-answer').value='';
+ document.getElementById('type-status').textContent='';
+}
+function checkTyping(){
+ const ans=document.getElementById('type-answer').value.trim();
+ const correct=active.find(x=>x.uk===typeCurrent)?.en||'';
+ document.getElementById('type-status').textContent=(ans.toLowerCase()===correct.toLowerCase())?'Correct! 🎉':'Wrong! Correct: '+correct;
+}
 
-/* ===== SPEED ===== */
-let speedTime=30, speedTimer=null, speedScore=0, speedCurrent=null;
-function startSpeed(){ speedTime=30; speedScore=0; document.getElementById('speed-score').textContent=speedScore; document.getElementById('speed-status').textContent=''; document.getElementById('speed-timer').textContent='30s'; document.getElementById('speed-input').value=''; nextSpeed(); if(speedTimer) clearInterval(speedTimer); speedTimer=setInterval(()=>{ speedTime--; document.getElementById('speed-timer').textContent = speedTime+'s'; if(speedTime<=0){ clearInterval(speedTimer); endSpeed(); } },1000); document.getElementById('speed-input').focus(); }
-function nextSpeed(){ speedCurrent = rand(active); document.getElementById('speed-uk').textContent = speedCurrent.uk; document.getElementById('speed-input').value=''; }
-document.getElementById('speed-input').addEventListener('keyup', (e)=>{
-  if(e.key !== 'Enter') return;
-  if(!speedCurrent || speedTime<=0) return;
-  const val = e.target.value.trim().toLowerCase();
-  if(val === speedCurrent.en.toLowerCase()){ speedScore++; document.getElementById('speed-status').textContent='✅'; document.getElementById('speed-status').style.color='green'; } else { document.getElementById('speed-status').textContent='❌ '+speedCurrent.en; document.getElementById('speed-status').style.color='red'; }
-  document.getElementById('speed-score').textContent = speedScore;
-  nextSpeed();
-});
-function endSpeed(){ document.getElementById('speed-uk').textContent='Час вичерпано!'; document.getElementById('speed-status').textContent=`Ви набрали ${speedScore}`; if(speedScore>Math.max(1,Math.floor(active.length/3))) firework(); }
+// ===== SPEED QUIZ =====
+let speedCurrent='';
+function startSpeed(){
+ buildActive();
+ speedCurrent=rand(active).uk;
+ document.getElementById('speed-question').textContent=speedCurrent;
+ document.getElementById('speed-answer').value='';
+ document.getElementById('speed-status').textContent='';
+}
+function checkSpeed(){
+ const ans=document.getElementById('speed-answer').value.trim();
+ const correct=active.find(x=>x.uk===speedCurrent)?.en||'';
+ document.getElementById('speed-status').textContent=(ans.toLowerCase()===correct.toLowerCase())?'Correct! 🎉':'Wrong! Correct: '+correct;
+}
 
-/* ===== controls ===== */
-function applyAll(){ buildActive(); initAll(); }
-function shuffleAll(){ buildActive(); initAll(); }
-function initAll(){ startFlash(); startDialog(); startMatch(); startListening(); startTyping(); /* speed waits for user */ }
+// ===== MULTIPLE CHOICE QUIZ =====
+let quizCurrent='';
+function startQuiz(){
+ buildActive();
+ quizCurrent=rand(active);
+ document.getElementById('quiz-question').textContent=quizCurrent.uk;
+ const opts=[quizCurrent.en];
+ while(opts.length<Math.min(4,active.length)){
+   const o=rand(active).en;
+   if(!opts.includes(o))opts.push(o);
+ }
+ const shuffled=shuffle(opts);
+ const container=document.getElementById('quiz-options');container.innerHTML='';
+ shuffled.forEach(t=>{
+   const b=document.createElement('button');b.className='small';b.textContent=t;b.onclick=()=>checkQuiz(t);
+ });
+ document.getElementById('quiz-status').textContent='';
+}
+function checkQuiz(sel){
+ document.getElementById('quiz-status').textContent=(sel===quizCurrent.en)?'Correct! 🎉':'Wrong! Correct: '+quizCurrent.en;
+}
 
-/* ===== init ===== */
-buildActive(); initAll(); openGame('flash');
+// ===== ORDER SENTENCES =====
+let orderActive=[];
+function startOrder(){
+ buildActive();
+ orderActive=shuffle(active.map(x=>x.en));
+ const container=document.getElementById('order-pool');container.innerHTML='';
+ orderActive.forEach((t,i)=>{
+   const div=document.createElement('div');div.className='tile';div.textContent=t;div.draggable=true;
+   div.dataset.index=i;
+   div.ondragstart=e=>e.dataTransfer.setData('text',i);
+   div.ondragover=e=>e.preventDefault();
+   div.ondrop=e=>onDropOrder(e);
+   container.appendChild(div);
+ });
+ document.getElementById('order-status').textContent='';
+}
+function onDropOrder(e){
+ const from=parseInt(e.dataTransfer.getData('text'));
+ const to=parseInt(e.target.dataset.index);
+ if(isNaN(to))return;
+ [orderActive[from],orderActive[to]]=[orderActive[to],orderActive[from]];
+ startOrder();
+ checkOrder();
+}
+function checkOrder(){
+ const correct=active.map(x=>x.en).join('|');
+ if(orderActive.join('|')===correct){
+   document.getElementById('order-status').textContent='Correct! 🎉';
+ }else{
+   document.getElementById('order-status').textContent='Keep trying...';
+ }
+}
 
-/* keyboard shortcuts */
-document.addEventListener('keydown',(e)=>{
-  if(e.key==='1') openGame('flash');
-  if(e.key==='2') openGame('dialog');
-  if(e.key==='3') openGame('match');
-  if(e.key==='4') openGame('listen');
-  if(e.key==='5') openGame('type');
-  if(e.key==='6') openGame('speed');
-});
+// ===== INIT =====
+function applyAll(){
+ buildActive();
+ startMatch();
+ startListen();
+ startType();
+ startSpeed();
+ startQuiz();
+ startOrder();
+}
+function shuffleAll(){applyAll();}
+applyAll();
 </script>
 </body>
 </html>

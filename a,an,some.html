@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles: A, An, & Some - Interactive Worksheet</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .rules-box {
+            background-color: #e8f4fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+        
+        h2 {
+            color: #2980b9;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #bdc3c7;
+        }
+        
+        h3 {
+            color: #16a085;
+            margin: 20px 0 10px;
+        }
+        
+        .example {
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-style: italic;
+            border-left: 3px solid #16a085;
+        }
+        
+        .exercise {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        input[type="radio"] {
+            transform: scale(1.3);
+            accent-color: #3498db;
+        }
+        
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            width: 100px;
+            font-size: 16px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        
+        button {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px 5px 0 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        #resetBtn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .score-container {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(to right, #e8f4fc, #d1ecf1);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .highlight {
+            background-color: #fff3cd;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .toggle-btn:hover {
+            background: #2980b9;
+        }
+        
+        .challenge-box {
+            background-color: #fff3cd;
+            border: 2px dashed #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .correction-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .correction-text {
+            font-weight: bold;
+            min-width: 150px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .correction-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .celebrate {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Articles: A, An, & Some</h1>
+            <p class="subtitle">Interactive Worksheet for English Learners</p>
+        </header>
+        
+        <div class="score-container">
+            <div>Your Progress: <span id="scoreDisplay">0%</span></div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="rules-box">
+            <h2 class="section-title">
+                Part 1: The Rules
+                <button class="toggle-btn" id="toggleRules">Show Rules</button>
+            </h2>
+            <div id="rulesContent" class="hidden">
+                <p><strong>A</strong> and <strong>An</strong> are <em>indefinite articles</em>. We use them with singular, countable nouns when we are talking about something general or non-specific.</p>
+                
+                <h3>When to use A vs. An</h3>
+                <ul>
+                    <li>Use <span class="highlight">A</span> before a word that begins with a <strong>consonant sound</strong>.
+                        <div class="example">Example: a cat, a dog, a university (university starts with a 'y' sound)</div>
+                    </li>
+                    <li>Use <span class="highlight">An</span> before a word that begins with a <strong>vowel sound</strong> (a, e, i, o, u).
+                        <div class="example">Example: an apple, an egg, an hour (hour starts with an 'o' sound)</div>
+                    </li>
+                </ul>
+                
+                <h3>When to use Some</h3>
+                <p><strong>Some</strong> is a <em>quantifier</em>. We use it with <strong>plural countable nouns</strong> and <strong>uncountable nouns</strong> when the amount is not specific or is unknown.</p>
+                
+                <ul>
+                    <li>Use <span class="highlight">Some</span> with plural countable nouns.
+                        <div class="example">Example: some books, some cars, some friends</div>
+                    </li>
+                    <li>Use <span class="highlight">Some</span> with uncountable nouns (things you cannot count, like liquids, concepts, materials).
+                        <div class="example">Example: some water, some information, some rice</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="exercise">
+            <h2>Part 2A: Choose the correct article: A or An?</h2>
+            <p>Select the correct article for each sentence.</p>
+            
+            <div class="question">
+                <p>1. I need to buy _____ new umbrella.</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1a" value="a">
+                        <label for="q1a">a</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1b" value="an">
+                        <label for="q1b">an</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback1"></div>
+            </div>
+            
+            <div class="question">
+                <p>2. She is eating _____ orange.</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2a" value="a">
+                        <label for="q2a">a</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2b" value="an">
+                        <label for="q2b">an</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback2"></div>
+            </div>
+            
+            <div class="question">
+                <p>3. He is _____ honest man.</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3a" value="a">
+                        <label for="q3a">a</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3b" value="an">
+                        <label for="q3b">an</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback3"></div>
+            </div>
+            
+            <div class="question">
+                <p>4. There is _____ spider in the bath.</p>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4a" value="a">
+                        <label for="q4a">a</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4b" value="an">
+                        <label for="q4b">an</label>
+                    </div>
+                </div>
+                <div class="feedback" id="feedback4"></div>
+            </div>
+            
+            <button id="checkPart2A">Check Answers</button>
+        </div>
+        
+        <div class="exercise">
+            <h2>Part 2B: Fill in the blanks with A, An, or Some</h2>
+            <p>Type the correct article in each blank.</p>
+            
+            <div class="question">
+                <p>1. Please get me <input type="text" id="q5"> bread from the bakery.</p>
+                <div class="feedback" id="feedback5"></div>
+            </div>
+            
+            <div class="question">
+                <p>2. I saw <input type="text" id="q6"> beautiful bird in the garden.</p>
+                <div class="feedback" id="feedback6"></div>
+            </div>
+            
+            <div class="question">
+                <p>3. Do you have <input type="text" id="q7"> money I can borrow?</p>
+                <div class="feedback" id="feedback7"></div>
+            </div>
+            
+            <div class="question">
+                <p>4. He is reading <input type="text" id="q8"> interesting book.</p>
+                <div class="feedback" id="feedback8"></div>
+            </div>
+            
+            <button id="checkPart2B">Check Answers</button>
+        </div>
+        
+        <div class="exercise">
+            <h2>Part 3: Simplified Challenge!</h2>
+            <p>Match the incorrect articles with their corrections from the paragraph below.</p>
+            
+            <div class="challenge-box">
+                <p>"I had a very busy day. In the morning, I ate an toast for breakfast. Then I went to the store to get a milk and an bread. I saw an friend there, and we talked for a hour. Later, I did some work on my computer and drank a water. I need to find an new job soon!"</p>
+            </div>
+            
+            <p><strong>Instructions:</strong> For each incorrect article in the list below, select the correct article from the dropdown.</p>
+            
+            <div class="question">
+                <div class="correction-item">
+                    <span class="correction-text">1. "an toast" should be:</span>
+                    <select id="c1">
+                        <option value="">Select correction</option>
+                        <option value="a">a</option>
+                        <option value="some">some</option>
+                    </select>
+                </div>
+                <div class="feedback" id="feedbackC1"></div>
+            </div>
+            
+            <div class="question">
+                <div class="correction-item">
+                    <span class="correction-text">2. "a milk" should be:</span>
+                    <select id="c2">
+                        <option value="">Select correction</option>
+                        <option value="an">an</option>
+                        <option value="some">some</option>
+                    </select>
+                </div>
+                <div class="feedback" id="feedbackC2"></div>
+            </div>
+            
+            <div class="question">
+                <div class="correction-item">
+                    <span class="correction-text">3. "an bread" should be:</span>
+                    <select id="c3">
+                        <option value="">Select correction</option>
+                        <option value="a">a</option>
+                        <option value="some">some</option>
+                    </select>
+                </div>
+                <div class="feedback" id="feedbackC3"></div>
+            </div>
+            
+            <div class="question">
+                <div class="correction-item">
+                    <span class="correction-text">4. "an friend" should be:</span>
+                    <select id="c4">
+                        <option value="">Select correction</option>
+                        <option value="a">a</option>
+                        <option value="some">some</option>
+                    </select>
+                </div>
+                <div class="feedback" id="feedbackC4"></div>
+            </div>
+            
+            <div class="question">
+                <div class="correction-item">
+                    <span class="correction-text">5. "a hour" should be:</span>
+                    <select id="c5">
+                        <option value="">Select correction</option>
+                        <option value="an">an</option>
+                        <option value="some">some</option>
+                    </select>
+                </div>
+                <div class="feedback" id="feedbackC5"></div>
+            </div>
+            
+            <div class="question">
+                <div class="correction-item">
+                    <span class="correction-text">6. "a water" should be:</span>
+                    <select id="c6">
+                        <option value="">Select correction</option>
+                        <option value="an">an</option>
+                        <option value="some">some</option>
+                    </select>
+                </div>
+                <div class="feedback" id="feedbackC6"></div>
+            </div>
+            
+            <div class="question">
+                <div class="correction-item">
+                    <span class="correction-text">7. "an new job" should be:</span>
+                    <select id="c7">
+                        <option value="">Select correction</option>
+                        <option value="a">a</option>
+                        <option value="some">some</option>
+                    </select>
+                </div>
+                <div class="feedback" id="feedbackC7"></div>
+            </div>
+            
+            <button id="checkChallenge">Check Answers</button>
+        </div>
+        
+        <div class="celebrate hidden" id="completionMessage">Congratulations! You've completed the worksheet!</div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button id="resetBtn">Reset All Answers</button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle rules visibility
+        document.getElementById('toggleRules').addEventListener('click', function() {
+            const rulesContent = document.getElementById('rulesContent');
+            const isHidden = rulesContent.classList.contains('hidden');
+            
+            if (isHidden) {
+                rulesContent.classList.remove('hidden');
+                this.textContent = 'Hide Rules';
+            } else {
+                rulesContent.classList.add('hidden');
+                this.textContent = 'Show Rules';
+            }
+        });
+        
+        // Correct answers
+        const correctAnswers = {
+            // Part 2A
+            q1: 'an',
+            q2: 'an',
+            q3: 'an',
+            q4: 'a',
+            
+            // Part 2B
+            q5: 'some',
+            q6: 'a',
+            q7: 'some',
+            q8: 'an',
+            
+            // Challenge
+            c1: 'some',
+            c2: 'some',
+            c3: 'some',
+            c4: 'a',
+            c5: 'an',
+            c6: 'some',
+            c7: 'a'
+        };
+        
+        // Track answered questions
+        const answeredQuestions = new Set();
+        const totalQuestions = Object.keys(correctAnswers).length;
+        
+        // Update progress
+        function updateProgress() {
+            const progress = (answeredQuestions.size / totalQuestions) * 100;
+            document.getElementById('scoreDisplay').textContent = `${Math.round(progress)}%`;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Show completion message if all questions answered
+            if (answeredQuestions.size === totalQuestions) {
+                document.getElementById('completionMessage').classList.remove('hidden');
+            } else {
+                document.getElementById('completionMessage').classList.add('hidden');
+            }
+        }
+        
+        // Check answers for Part 2A
+        document.getElementById('checkPart2A').addEventListener('click', function() {
+            const questions = ['q1', 'q2', 'q3', 'q4'];
+            
+            questions.forEach(q => {
+                const selectedOption = document.querySelector(`input[name="${q}"]:checked`);
+                const feedback = document.getElementById(`feedback${q.charAt(1)}`);
+                
+                if (selectedOption) {
+                    answeredQuestions.add(q);
+                    
+                    if (selectedOption.value === correctAnswers[q]) {
+                        feedback.textContent = 'Correct!';
+                        feedback.className = 'feedback correct';
+                    } else {
+                        feedback.textContent = `Incorrect. The correct answer is "${correctAnswers[q]}".`;
+                        feedback.className = 'feedback incorrect';
+                    }
+                    
+                    feedback.style.display = 'block';
+                } else {
+                    const feedback = document.getElementById(`feedback${q.charAt(1)}`);
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'feedback incorrect';
+                    feedback.style.display = 'block';
+                }
+            });
+            
+            updateProgress();
+        });
+        
+        // Check answers for Part 2B
+        document.getElementById('checkPart2B').addEventListener('click', function() {
+            const questions = ['q5', 'q6', 'q7', 'q8'];
+            
+            questions.forEach(q => {
+                const input = document.getElementById(q);
+                const feedback = document.getElementById(`feedback${q.charAt(1)}`);
+                const answer = input.value.trim().toLowerCase();
+                
+                if (answer) {
+                    answeredQuestions.add(q);
+                    
+                    if (answer === correctAnswers[q]) {
+                        feedback.textContent = 'Correct!';
+                        feedback.className = 'feedback correct';
+                    } else {
+                        feedback.textContent = `Incorrect. The correct answer is "${correctAnswers[q]}".`;
+                        feedback.className = 'feedback incorrect';
+                    }
+                    
+                    feedback.style.display = 'block';
+                } else {
+                    feedback.textContent = 'Please enter an answer.';
+                    feedback.className = 'feedback incorrect';
+                    feedback.style.display = 'block';
+                }
+            });
+            
+            updateProgress();
+        });
+        
+        // Check answers for Challenge
+        document.getElementById('checkChallenge').addEventListener('click', function() {
+            const questions = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
+            
+            questions.forEach(q => {
+                const select = document.getElementById(q);
+                const feedback = document.getElementById(`feedback${q.toUpperCase()}`);
+                const answer = select.value;
+                
+                if (answer) {
+                    answeredQuestions.add(q);
+                    
+                    if (answer === correctAnswers[q]) {
+                        feedback.textContent = 'Correct!';
+                        feedback.className = 'feedback correct';
+                    } else {
+                        feedback.textContent = `Incorrect. The correct answer is "${correctAnswers[q]}".`;
+                        feedback.className = 'feedback incorrect';
+                    }
+                    
+                    feedback.style.display = 'block';
+                } else {
+                    feedback.textContent = 'Please select an answer.';
+                    feedback.className = 'feedback incorrect';
+                    feedback.style.display = 'block';
+                }
+            });
+            
+            updateProgress();
+        });
+        
+        // Reset all answers
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            // Reset radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Reset text inputs
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset select inputs
+            document.querySelectorAll('select').forEach(select => {
+                select.selectedIndex = 0;
+            });
+            
+            // Hide all feedback
+            document.querySelectorAll('.feedback').forEach(feedback => {
+                feedback.style.display = 'none';
+            });
+            
+            // Reset progress
+            answeredQuestions.clear();
+            updateProgress();
+        });
+        
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>
