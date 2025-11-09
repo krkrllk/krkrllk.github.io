@@ -13,7 +13,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
             color: #333;
             line-height: 1.6;
             padding: 20px;
@@ -21,19 +21,19 @@
         }
         
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: white;
+            background: #f8f9fa;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
         header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #eaeaea;
+            border-bottom: 2px solid #dee2e6;
         }
         
         h1 {
@@ -43,43 +43,43 @@
         }
         
         .subtitle {
-            color: #7f8c8d;
+            color: #6c757d;
             font-size: 1.2rem;
         }
         
         .rules-box {
-            background-color: #e8f4fc;
+            background-color: #e9ecef;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 30px;
-            border-left: 5px solid #3498db;
+            border-left: 5px solid #495057;
         }
         
         h2 {
-            color: #2980b9;
+            color: #495057;
             margin: 25px 0 15px;
             padding-bottom: 8px;
-            border-bottom: 1px dashed #bdc3c7;
+            border-bottom: 1px dashed #adb5bd;
         }
         
         h3 {
-            color: #16a085;
+            color: #343a40;
             margin: 20px 0 10px;
         }
         
         .example {
-            background-color: #f9f9f9;
+            background-color: #f1f3f4;
             padding: 12px;
             border-radius: 8px;
             margin: 10px 0;
             font-style: italic;
-            border-left: 3px solid #16a085;
+            border-left: 3px solid #6c757d;
         }
         
         .exercise {
             margin: 30px 0;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
@@ -87,9 +87,9 @@
         .question {
             margin-bottom: 20px;
             padding: 15px;
-            background: white;
+            background: #f8f9fa;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
         }
         
         .options {
@@ -107,12 +107,12 @@
         
         input[type="radio"] {
             transform: scale(1.3);
-            accent-color: #3498db;
+            accent-color: #495057;
         }
         
         input[type="text"] {
             padding: 10px;
-            border: 2px solid #ddd;
+            border: 2px solid #ced4da;
             border-radius: 6px;
             width: 100px;
             font-size: 16px;
@@ -121,13 +121,13 @@
         }
         
         input[type="text"]:focus {
-            border-color: #3498db;
+            border-color: #495057;
             outline: none;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+            box-shadow: 0 0 5px rgba(73, 80, 87, 0.5);
         }
         
         button {
-            background: linear-gradient(to right, #3498db, #2c3e50);
+            background: linear-gradient(to right, #495057, #343a40);
             color: white;
             border: none;
             padding: 12px 25px;
@@ -146,7 +146,7 @@
         }
         
         #resetBtn {
-            background: linear-gradient(to right, #e74c3c, #c0392b);
+            background: linear-gradient(to right, #6c757d, #495057);
         }
         
         .feedback {
@@ -175,7 +175,7 @@
             font-weight: bold;
             margin: 20px 0;
             padding: 15px;
-            background: linear-gradient(to right, #e8f4fc, #d1ecf1);
+            background: #e9ecef;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
@@ -185,7 +185,7 @@
         }
         
         .highlight {
-            background-color: #fff3cd;
+            background-color: #dee2e6;
             padding: 3px 6px;
             border-radius: 4px;
             font-weight: bold;
@@ -199,7 +199,7 @@
         }
         
         .toggle-btn {
-            background: #3498db;
+            background: #495057;
             color: white;
             border: none;
             padding: 8px 15px;
@@ -210,12 +210,12 @@
         }
         
         .toggle-btn:hover {
-            background: #2980b9;
+            background: #343a40;
         }
         
         .challenge-box {
-            background-color: #fff3cd;
-            border: 2px dashed #ffc107;
+            background-color: #f8f9fa;
+            border: 2px dashed #6c757d;
             padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
@@ -232,6 +232,14 @@
         .correction-text {
             font-weight: bold;
             min-width: 150px;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border: 2px solid #ced4da;
+            border-radius: 6px;
+            background-color: white;
+            font-size: 16px;
         }
         
         @media (max-width: 768px) {
@@ -257,7 +265,7 @@
         
         .progress-bar {
             height: 10px;
-            background-color: #ecf0f1;
+            background-color: #ced4da;
             border-radius: 5px;
             margin: 15px 0;
             overflow: hidden;
@@ -265,7 +273,7 @@
         
         .progress {
             height: 100%;
-            background: linear-gradient(to right, #2ecc71, #27ae60);
+            background: linear-gradient(to right, #495057, #343a40);
             width: 0%;
             transition: width 0.5s;
         }
@@ -273,7 +281,7 @@
         .celebrate {
             text-align: center;
             font-size: 1.5rem;
-            color: #e74c3c;
+            color: #495057;
             font-weight: bold;
             margin: 20px 0;
             animation: pulse 1.5s infinite;
@@ -283,6 +291,18 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
+        }
+        
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .exercise-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -332,102 +352,230 @@
             </div>
         </div>
         
+        <div class="exercise-grid">
+            <div class="exercise">
+                <h2>Part 2A: A or An?</h2>
+                <p>Select the correct article for each sentence.</p>
+                
+                <div class="question">
+                    <p>1. I need to buy _____ new umbrella.</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q1" id="q1a" value="a">
+                            <label for="q1a">a</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" id="q1b" value="an">
+                            <label for="q1b">an</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback1"></div>
+                </div>
+                
+                <div class="question">
+                    <p>2. She is eating _____ orange.</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q2" id="q2a" value="a">
+                            <label for="q2a">a</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" id="q2b" value="an">
+                            <label for="q2b">an</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback2"></div>
+                </div>
+                
+                <div class="question">
+                    <p>3. He is _____ honest man.</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q3" id="q3a" value="a">
+                            <label for="q3a">a</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" id="q3b" value="an">
+                            <label for="q3b">an</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback3"></div>
+                </div>
+                
+                <div class="question">
+                    <p>4. There is _____ spider in the bath.</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q4" id="q4a" value="a">
+                            <label for="q4a">a</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" id="q4b" value="an">
+                            <label for="q4b">an</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback4"></div>
+                </div>
+                
+                <button id="checkPart2A">Check Answers</button>
+            </div>
+            
+            <div class="exercise">
+                <h2>Part 2B: A, An, or Some?</h2>
+                <p>Type the correct article in each blank.</p>
+                
+                <div class="question">
+                    <p>1. Please get me <input type="text" id="q5"> bread from the bakery.</p>
+                    <div class="feedback" id="feedback5"></div>
+                </div>
+                
+                <div class="question">
+                    <p>2. I saw <input type="text" id="q6"> beautiful bird in the garden.</p>
+                    <div class="feedback" id="feedback6"></div>
+                </div>
+                
+                <div class="question">
+                    <p>3. Do you have <input type="text" id="q7"> money I can borrow?</p>
+                    <div class="feedback" id="feedback7"></div>
+                </div>
+                
+                <div class="question">
+                    <p>4. He is reading <input type="text" id="q8"> interesting book.</p>
+                    <div class="feedback" id="feedback8"></div>
+                </div>
+                
+                <button id="checkPart2B">Check Answers</button>
+            </div>
+        </div>
+        
         <div class="exercise">
-            <h2>Part 2A: Choose the correct article: A or An?</h2>
+            <h2>Part 3: More Practice</h2>
+            <p>Fill in the blanks with A, An, or Some.</p>
+            
+            <div class="question">
+                <p>1. Can I have _____ apple from that basket?</p>
+                <input type="text" id="q9">
+                <div class="feedback" id="feedback9"></div>
+            </div>
+            
+            <div class="question">
+                <p>2. We need to buy _____ milk and _____ eggs.</p>
+                <input type="text" id="q10"> milk and <input type="text" id="q11"> eggs.
+                <div class="feedback" id="feedback10"></div>
+            </div>
+            
+            <div class="question">
+                <p>3. She wants to be _____ engineer when she grows up.</p>
+                <input type="text" id="q12">
+                <div class="feedback" id="feedback12"></div>
+            </div>
+            
+            <div class="question">
+                <p>4. I'd like _____ information about your courses.</p>
+                <input type="text" id="q13">
+                <div class="feedback" id="feedback13"></div>
+            </div>
+            
+            <div class="question">
+                <p>5. He's _____ university professor.</p>
+                <input type="text" id="q14">
+                <div class="feedback" id="feedback14"></div>
+            </div>
+            
+            <div class="question">
+                <p>6. Could you give me _____ advice?</p>
+                <input type="text" id="q15">
+                <div class="feedback" id="feedback15"></div>
+            </div>
+            
+            <button id="checkPart3">Check Answers</button>
+        </div>
+        
+        <div class="exercise">
+            <h2>Part 4: Choose the Correct Option</h2>
             <p>Select the correct article for each sentence.</p>
             
             <div class="question">
-                <p>1. I need to buy _____ new umbrella.</p>
+                <p>1. I need _____ help with my homework.</p>
                 <div class="options">
                     <div class="option">
-                        <input type="radio" name="q1" id="q1a" value="a">
-                        <label for="q1a">a</label>
+                        <input type="radio" name="q16" id="q16a" value="a">
+                        <label for="q16a">a</label>
                     </div>
                     <div class="option">
-                        <input type="radio" name="q1" id="q1b" value="an">
-                        <label for="q1b">an</label>
+                        <input type="radio" name="q16" id="q16b" value="an">
+                        <label for="q16b">an</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" id="q16c" value="some">
+                        <label for="q16c">some</label>
                     </div>
                 </div>
-                <div class="feedback" id="feedback1"></div>
+                <div class="feedback" id="feedback16"></div>
             </div>
             
             <div class="question">
-                <p>2. She is eating _____ orange.</p>
+                <p>2. She bought _____ new car yesterday.</p>
                 <div class="options">
                     <div class="option">
-                        <input type="radio" name="q2" id="q2a" value="a">
-                        <label for="q2a">a</label>
+                        <input type="radio" name="q17" id="q17a" value="a">
+                        <label for="q17a">a</label>
                     </div>
                     <div class="option">
-                        <input type="radio" name="q2" id="q2b" value="an">
-                        <label for="q2b">an</label>
+                        <input type="radio" name="q17" id="q17b" value="an">
+                        <label for="q17b">an</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" id="q17c" value="some">
+                        <label for="q17c">some</label>
                     </div>
                 </div>
-                <div class="feedback" id="feedback2"></div>
+                <div class="feedback" id="feedback17"></div>
             </div>
             
             <div class="question">
-                <p>3. He is _____ honest man.</p>
+                <p>3. They have _____ interesting ideas.</p>
                 <div class="options">
                     <div class="option">
-                        <input type="radio" name="q3" id="q3a" value="a">
-                        <label for="q3a">a</label>
+                        <input type="radio" name="q18" id="q18a" value="a">
+                        <label for="q18a">a</label>
                     </div>
                     <div class="option">
-                        <input type="radio" name="q3" id="q3b" value="an">
-                        <label for="q3b">an</label>
+                        <input type="radio" name="q18" id="q18b" value="an">
+                        <label for="q18b">an</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" id="q18c" value="some">
+                        <label for="q18c">some</label>
                     </div>
                 </div>
-                <div class="feedback" id="feedback3"></div>
+                <div class="feedback" id="feedback18"></div>
             </div>
             
             <div class="question">
-                <p>4. There is _____ spider in the bath.</p>
+                <p>4. It will take _____ hour to get there.</p>
                 <div class="options">
                     <div class="option">
-                        <input type="radio" name="q4" id="q4a" value="a">
-                        <label for="q4a">a</label>
+                        <input type="radio" name="q19" id="q19a" value="a">
+                        <label for="q19a">a</label>
                     </div>
                     <div class="option">
-                        <input type="radio" name="q4" id="q4b" value="an">
-                        <label for="q4b">an</label>
+                        <input type="radio" name="q19" id="q19b" value="an">
+                        <label for="q19b">an</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" id="q19c" value="some">
+                        <label for="q19c">some</label>
                     </div>
                 </div>
-                <div class="feedback" id="feedback4"></div>
+                <div class="feedback" id="feedback19"></div>
             </div>
             
-            <button id="checkPart2A">Check Answers</button>
+            <button id="checkPart4">Check Answers</button>
         </div>
         
         <div class="exercise">
-            <h2>Part 2B: Fill in the blanks with A, An, or Some</h2>
-            <p>Type the correct article in each blank.</p>
-            
-            <div class="question">
-                <p>1. Please get me <input type="text" id="q5"> bread from the bakery.</p>
-                <div class="feedback" id="feedback5"></div>
-            </div>
-            
-            <div class="question">
-                <p>2. I saw <input type="text" id="q6"> beautiful bird in the garden.</p>
-                <div class="feedback" id="feedback6"></div>
-            </div>
-            
-            <div class="question">
-                <p>3. Do you have <input type="text" id="q7"> money I can borrow?</p>
-                <div class="feedback" id="feedback7"></div>
-            </div>
-            
-            <div class="question">
-                <p>4. He is reading <input type="text" id="q8"> interesting book.</p>
-                <div class="feedback" id="feedback8"></div>
-            </div>
-            
-            <button id="checkPart2B">Check Answers</button>
-        </div>
-        
-        <div class="exercise">
-            <h2>Part 3: Simplified Challenge!</h2>
+            <h2>Part 5: Error Correction</h2>
             <p>Match the incorrect articles with their corrections from the paragraph below.</p>
             
             <div class="challenge-box">
@@ -559,6 +707,21 @@
             q7: 'some',
             q8: 'an',
             
+            // Part 3
+            q9: 'an',
+            q10: 'some',
+            q11: 'some',
+            q12: 'an',
+            q13: 'some',
+            q14: 'a',
+            q15: 'some',
+            
+            // Part 4
+            q16: 'some',
+            q17: 'a',
+            q18: 'some',
+            q19: 'an',
+            
             // Challenge
             c1: 'some',
             c2: 'some',
@@ -641,6 +804,67 @@
                     feedback.style.display = 'block';
                 } else {
                     feedback.textContent = 'Please enter an answer.';
+                    feedback.className = 'feedback incorrect';
+                    feedback.style.display = 'block';
+                }
+            });
+            
+            updateProgress();
+        });
+        
+        // Check answers for Part 3
+        document.getElementById('checkPart3').addEventListener('click', function() {
+            const questions = ['q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15'];
+            
+            questions.forEach(q => {
+                const input = document.getElementById(q);
+                const feedback = document.getElementById(`feedback${q.charAt(1)}${q.charAt(2) || ''}`);
+                const answer = input.value.trim().toLowerCase();
+                
+                if (answer) {
+                    answeredQuestions.add(q);
+                    
+                    if (answer === correctAnswers[q]) {
+                        feedback.textContent = 'Correct!';
+                        feedback.className = 'feedback correct';
+                    } else {
+                        feedback.textContent = `Incorrect. The correct answer is "${correctAnswers[q]}".`;
+                        feedback.className = 'feedback incorrect';
+                    }
+                    
+                    feedback.style.display = 'block';
+                } else {
+                    feedback.textContent = 'Please enter an answer.';
+                    feedback.className = 'feedback incorrect';
+                    feedback.style.display = 'block';
+                }
+            });
+            
+            updateProgress();
+        });
+        
+        // Check answers for Part 4
+        document.getElementById('checkPart4').addEventListener('click', function() {
+            const questions = ['q16', 'q17', 'q18', 'q19'];
+            
+            questions.forEach(q => {
+                const selectedOption = document.querySelector(`input[name="${q}"]:checked`);
+                const feedback = document.getElementById(`feedback${q.charAt(1)}${q.charAt(2)}`);
+                
+                if (selectedOption) {
+                    answeredQuestions.add(q);
+                    
+                    if (selectedOption.value === correctAnswers[q]) {
+                        feedback.textContent = 'Correct!';
+                        feedback.className = 'feedback correct';
+                    } else {
+                        feedback.textContent = `Incorrect. The correct answer is "${correctAnswers[q]}".`;
+                        feedback.className = 'feedback incorrect';
+                    }
+                    
+                    feedback.style.display = 'block';
+                } else {
+                    feedback.textContent = 'Please select an answer.';
                     feedback.className = 'feedback incorrect';
                     feedback.style.display = 'block';
                 }

@@ -5,7 +5,6 @@ window.irregularVerbsList = [
     { word: "have", past: "had", part: "had", ua: "мати" },
     { word: "see", past: "saw", part: "seen", ua: "бачити" },
     { word: "eat", past: "ate", part: "eaten", ua: "їсти" },
-    { word: "write", past: "wrote", part: "written", ua: "писати" },
     { word: "take", past: "took", part: "taken", ua: "брати" },
     { word: "come", past: "came", part: "come", ua: "приходити" },
     { word: "get", past: "got", part: "gotten/got", ua: "отримувати" },
